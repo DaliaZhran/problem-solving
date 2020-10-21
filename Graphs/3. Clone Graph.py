@@ -36,7 +36,7 @@ class Solution(object):
         return cloned_node
 
 
-# DFS
+# BFS
 class Solution(object):
     def cloneGraph(self, node):
         """

@@ -7,9 +7,10 @@
 
 from collections import deque
 
-
+# Use BFS
+# * Time complexity: O(N)
+# * Space complexity: O(N)
 class Solution(object):
-    # Use BFS
     def canReach(self, arr, start):
         """
         :type arr: List[int]
@@ -33,6 +34,8 @@ class Solution(object):
 
 
 # DFS
+# * Time complexity: O(N)
+# * Space complexity: O(N)
 class Solution(object):
     def canReach(self, arr, start):
         """

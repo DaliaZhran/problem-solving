@@ -4,12 +4,9 @@
 
 # Return the smallest level X such that the sum of all the values of nodes at level X is maximal.
 
-# Definition for a binary tree node.
-# class TreeNode(object):
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
+
+# Time Complexity: O(N)
+# Space Complexity: O(N) because of stack call
 class Solution(object):
     def maxLevelSum(self, root):
         """

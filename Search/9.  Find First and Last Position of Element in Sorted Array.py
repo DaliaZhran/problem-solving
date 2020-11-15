@@ -62,4 +62,25 @@ class Solution:
         return res
 
 
+# Binary Search - 2 passes - better implementation
+class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        def binarySearch(isLeft):
+            left, right = 0, len(nums)
+            while left < right:
+                mid = left + (right - left) // 2
+                if nums[mid] > target or (isLeft and target == nums[mid]):
+                    right = mid
+                else:
+                    left = mid + 1
+            return left
+
+        if not nums:
+            return [-1, -1]
+        left = binarySearch(True)
+        if left == len(nums) or nums[left] != target:
+            return [-1, -1]
+        return [left, binarySearch(False) - 1]
+
+
 # https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/discuss/14699/Clean-iterative-solution-with-two-binary-searches-(with-explanation)

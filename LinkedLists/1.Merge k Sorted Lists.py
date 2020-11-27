@@ -38,11 +38,10 @@ class Solution(object):
 
         for l in lists:
             if l:
-                print(l)
                 heap.put((l.val, l))
+
         while not heap.empty():
             val, node = heap.get()
-
             dummy.next = ListNode(val)
             dummy = dummy.next
             node = node.next
@@ -66,11 +65,57 @@ class Solution(object):
                 l = l.next
         while not heap.empty():
             val, node = heap.get()
-
             dummy.next = ListNode(val)
             dummy = dummy.next
-        #             node = node.next
-        #             if node:
-        #                 heap.put((node.val, node))
+
+        return head.next
+
+
+# same idea, another implementation using heap
+class Solution(object):
+    # best implementation
+    # space -> O(k) where k is the len(lists)
+    # Time complexity : O(N log k)
+    def mergeKLists(self, lists):
+        """
+        :type lists: List[ListNode]
+        :rtype: ListNode
+        """
+        min_heap = []
+        head = dummy = ListNode(0)
+        for l in lists:
+            if l:  # add only first node since all lists are sorted, this decreases the space complexity
+                heappush(min_heap, (l.val, l))
+                l = l.next
+
+        while min_heap:
+            val, node = heappop(min_heap)
+            temp = node.next
+            node.next = None  # use this to avoid cycles instead of creating a new node
+            dummy.next = node
+            dummy = dummy.next
+            if temp:
+                heappush(min_heap, (temp.val, temp))
+        return head.next
+
+    # small edits too
+    # space -> O(N) where N is the number of nodes
+    def mergeKLists(self, lists):
+        """
+        :type lists: List[ListNode]
+        :rtype: ListNode
+        """
+        min_heap = []
+        head = dummy = ListNode(0)
+        for l in lists:
+            while l:  # add all nodes in the heap
+                heappush(min_heap, (l.val, l))
+                l = l.next
+
+        while min_heap:
+            val, node = heappop(min_heap)
+            node.next = None
+            dummy.next = node
+            dummy = dummy.next
 
         return head.next

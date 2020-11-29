@@ -47,3 +47,51 @@ class Solution(object):
 
 
 # check binary solution -> https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/solution/
+
+# check time complexity again
+class Solution(object):
+    def kthSmallest(self, matrix, k):
+        """
+        :type matrix: List[List[int]]
+        :type k: int
+        :rtype: int
+        """
+        n = len(matrix)
+        start, end = matrix[0][0], matrix[n - 1][n - 1]
+
+        while start < end:
+            mid = start + (end - start) // 2
+            smaller, larger = matrix[0][0], matrix[n - 1][n - 1]
+            count, smaller, larger = self.countLessEqual(matrix, smaller, mid, larger)
+
+            if count == k:
+                return smaller
+            elif count > k:
+                end = smaller
+            else:
+                start = larger
+
+        return start
+
+    def countLessEqual(self, matrix, smaller, mid, larger):
+        count, n = 0, len(matrix)
+        row, col = n - 1, 0
+
+        while row >= 0 and col < n:
+            if matrix[row][col] > mid:
+
+                # As matrix[row][col] is bigger than the mid, let's keep track of the
+                # smallest number greater than the mid
+                larger = min(larger, matrix[row][col])
+                row -= 1
+
+            else:
+
+                # As matrix[row][col] is less than or equal to the mid, let's keep track of the
+                # biggest number less than or equal to the mid
+
+                smaller = max(smaller, matrix[row][col])
+                count += row + 1
+                col += 1
+
+        return count, smaller, larger

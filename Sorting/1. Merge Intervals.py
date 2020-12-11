@@ -10,21 +10,22 @@
 
 # * time -> O(n)
 # * space -> O(n)
-class Solution:
-    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
-        if not intervals:
-            return []
+class Solution(object):
+    def merge(self, intervals):
+        """
+        :type intervals: List[List[int]]
+        :rtype: List[List[int]]
+        """
+        intervals.sort(key=lambda x: x[0])
+        start, end = intervals[0][0], intervals[0][1]
         res = []
-        intervals.sort()
-        start = intervals[0][0]
-        end = intervals[0][1]
-        for i in intervals:
-            if i[0] > end:
-                res.append([start, end])
-                start = i[0]
-                end = i[1]
+        for i in range(1, len(intervals)):
+            if intervals[i][0] <= end:
+                if intervals[i][1] > end:
+                    end = intervals[i][1]
             else:
-                if i[1] > end:
-                    end = i[1]
+                res.append([start, end])
+                start = intervals[i][0]
+                end = intervals[i][1]
         res.append([start, end])
         return res

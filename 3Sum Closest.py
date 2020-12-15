@@ -1,6 +1,6 @@
 #   https://leetcode.com/problems/3sum-closest/
 
-'''
+"""
 Given an array nums of n integers and an integer target, find three integers in nums such that the sum is closest to target. Return the sum of the three integers. You may assume that each input would have exactly one solution.
 
  
@@ -10,11 +10,11 @@ Example 1:
 Input: nums = [-1,2,1,-4], target = 1
 Output: 2
 Explanation: The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
-''''
+"""
 
-
+# * Approach 1: Two Pointers Approach
 # time -> O(n^2)
-# space =  from O(log n) to O(n), depending on the implementation of the sorting algorithm and ignoring the space of the output
+# space = O(n) for sorting
 class Solution(object):
     def threeSumClosest(self, nums, target):
         """
@@ -43,6 +43,6 @@ class Solution(object):
         return result
 
 
-'''
+"""
 If an interviewer asks you whether you can achieve O(1) memory complexity, you can use the selection sort instead of a built-in sort in the Two Pointers approach. It will make it a bit slower, though the overall time complexity will be still O(n^2).
-'''
+"""

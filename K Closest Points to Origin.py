@@ -22,11 +22,22 @@ We only want the closest K = 1 points from the origin, so the answer is just [[-
 
 from heapq import heappop, heappush
 
-# Time -> O(n log k)
-# Space -> O(k)
+
+# * Approach 1: Sort
+# Time -> O(n log n) where n is the number of all points
+# Space -> O(n)
+class Solution(object):
+    def kClosest(self, points, K):
+        points.sort(key=lambda P: P[0] ** 2 + P[1] ** 2)
+        return points[:K]
+
+
+# * Approach 2: Heap
+# Time -> O(n log K) where n is the number of all points and log(K) is the cost of adding and removing items from the heap
+# Space -> O(K) -> space used by heap
 class Solution(object):
     def calculateDistance(self, point):
-        return point[0] * point[0] + point[1] * point[1]
+        return point[0] * point[0] + point[1] * point[1]  # ignore the sqrt since we are just comparing points to each other
 
     def kClosest(self, points, K):
         """

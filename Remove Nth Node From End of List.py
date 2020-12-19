@@ -1,4 +1,3 @@
-
 # Definition for singly-linked list.
 # class ListNode(object):
 #     def __init__(self, x):
@@ -19,6 +18,7 @@ class Solution(object):
         for i in range(n):
             fast = fast.next
 
+        # if the target is the head, return head.next
         if not fast:
             return head.next
 

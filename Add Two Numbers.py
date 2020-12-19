@@ -52,25 +52,29 @@ class Solution(object):
         return head.next
 
 
-# Java Sol
-"""
-public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-    ListNode dummyHead = new ListNode(0);
-    ListNode p = l1, q = l2, curr = dummyHead;
-    int carry = 0;
-    while (p != null || q != null) {
-        int x = (p != null) ? p.val : 0;
-        int y = (q != null) ? q.val : 0;
-        int sum = carry + x + y;
-        carry = sum / 10;
-        curr.next = new ListNode(sum % 10);
-        curr = curr.next;
-        if (p != null) p = p.next;
-        if (q != null) q = q.next;
-    }
-    if (carry > 0) {
-        curr.next = new ListNode(carry);
-    }
-    return dummyHead.next;
-}
-"""
+# Shorter Implementation -> one while loop
+# time -> O(max(m, n))
+# space -> O(max(m, n))
+class Solution(object):
+    def addTwoNumbers(self, l1, l2):
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        res = head = ListNode(0)
+        carry = 0
+        while l1 or l2:
+            x = l1.val if l1 else 0
+            y = l2.val if l2 else 0
+            node_sum = x + y + carry
+            carry = node_sum // 10
+            res.next = ListNode(node_sum % 10)
+            res = res.next
+            l1 = None if not l1 else l1.next
+            l2 = None if not l2 else l2.next
+
+        if carry:
+            res.next = ListNode(carry)
+
+        return head.next

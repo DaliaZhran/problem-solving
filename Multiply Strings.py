@@ -26,7 +26,8 @@ class Solution(object):
         for i in range(len(num1) - 1, -1, -1):
             temp_pos = pos
             for j in range(len(num2) - 1, -1, -1):
-                result[temp_pos] += int(num1[i]) * int(num2[j])
+                product = (ord(num1[i]) - ord("0")) * (ord(num2[j]) - ord("0"))
+                result[temp_pos] += product
                 result[temp_pos - 1] += result[temp_pos] / 10
                 result[temp_pos] %= 10
                 temp_pos -= 1

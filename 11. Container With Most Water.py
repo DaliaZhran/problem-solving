@@ -7,7 +7,27 @@ Notice that you may not slant the container.
 
 """
 
-# O(N)
+# * Approach 1: Brute Force
+# time: O(n^2)
+# space: O(1)
+class Solution(object):
+    def maxArea(self, height):
+        """
+        :type height: List[int]
+        :rtype: int
+        """
+        max_area = -1
+        n = len(height)
+        for i in range(n):
+            for j in range(i + 1, n):
+                area = min(height[i], height[j]) * (j - i)
+                max_area = max(max_area, area)
+        return max_area
+
+
+# * Approach 2: Sliding Window
+# time: O(n)
+# space: O(1)
 class Solution(object):
     def maxArea(self, height):
         """

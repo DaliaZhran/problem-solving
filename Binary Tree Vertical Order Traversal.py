@@ -1,8 +1,9 @@
 # https://leetcode.com/problems/binary-tree-vertical-order-traversal/
+'''
+Given a binary tree, return the vertical order traversal of its nodes' values. (ie, from top to bottom, column by column).
 
-# Given a binary tree, return the vertical order traversal of its nodes' values. (ie, from top to bottom, column by column).
-
-# If two nodes are in the same row and column, the order should be from left to right.
+If two nodes are in the same row and column, the order should be from left to right.
+'''
 
 from collections import deque, defaultdict
 
@@ -14,7 +15,7 @@ class TreeNode(object):
         self.right = right
 
 # BFS
-# time -> O(N log N) -> O(N) for BFS and O(N log N) for sorting keys
+# time -> O(N) + O(W log W) -> O(N) for BFS and O(W log W) for sorting keys where W is the number of columns
 # space -> O(N)
 # Note: we can just use indexing in the queue instead of poping left -> faster
 class Solution(object):
@@ -75,18 +76,19 @@ class Solution(object):
 # DFS
 # time -> O(W * H log H) -> due to sorting each column -> W is the # of cols and H is the height
 # space -> O(N)
+# we keep number of rows to sort them at the end
 class Solution:
     def verticalOrder(self, root: TreeNode) -> List[List[int]]:
         if root is None:
             return []
 
-        columnTable = defaultdict(list)
+        column_table = defaultdict(list)
         min_column = max_column = 0
 
         def DFS(node, row, column):
             if node is not None:
                 nonlocal min_column, max_column
-                columnTable[column].append((row, node.val))
+                column_table[column].append((row, node.val))
                 min_column = min(min_column, column)
                 max_column = max(max_column, column)
 
@@ -99,8 +101,8 @@ class Solution:
         # order by column and sort by row
         ret = []
         for col in range(min_column, max_column + 1):
-            columnTable[col].sort(key=lambda x:x[0])
-            colVals = [val for row, val in columnTable[col]]
-            ret.append(colVals)
+            column_table[col].sort(key=lambda x:x[0])
+            col_vals = [val for row, val in column_table[col]]
+            ret.append(col_vals)
 
         return ret

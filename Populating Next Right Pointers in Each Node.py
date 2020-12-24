@@ -1,16 +1,19 @@
-# You are given a perfect binary tree where all leaves are on the same level, and every parent has two children. The binary tree has the following definition:
-
-# struct Node {
-#   int val;
-#   Node *left;
-#   Node *right;
-#   Node *next;
-# }
-# Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.
-
-# Initially, all next pointers are set to NULL.
+# https://leetcode.com/problems/populating-next-right-pointers-in-each-node/
 
 """
+You are given a perfect binary tree where all leaves are on the same level, and every parent has two children. The binary tree has the following definition:
+
+struct Node {
+  int val;
+  Node *left;
+  Node *right;
+  Node *next;
+}
+Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.
+
+# Initially, all next pointers are set to NULL.
+"""
+
 # Definition for a Node.
 class Node(object):
     def __init__(self, val=0, left=None, right=None, next=None):
@@ -18,11 +21,11 @@ class Node(object):
         self.left = left
         self.right = right
         self.next = next
-"""
 
-# BFS -> Not constant memory
+
+# BFS -> Not constant memory -> sentinel node
 # time O(n)
-# space O(n) queue
+# space O(n) for queue
 class Solution(object):
     def connect(self, root):
         """
@@ -82,22 +85,19 @@ class Solution(object):
 
 
 # better intuitive solution
-class Solution(object):
-    def connect(self, root):
-        """
-        :type root: Node
-        :rtype: Node
-        """
+class Solution:
+    def connect(self, root: "Node") -> "Node":
         if not root:
             return None
-        queue = deque([root])
 
+        queue = deque([root])
         while queue:
-            levelSize = len(queue)
-            for i in range(levelSize):
+            level_size = len(queue)
+            for i in range(level_size):
                 node = queue.popleft()
-                if i < levelSize - 1:  # means we didnt still reach the end of the level and also no need for else because node.next by default is None
+                if i != level_size - 1:  # means we didnt still reach the end of the level and also no need for else because node.next by default is None
                     node.next = queue[0]
+
                 if node.left:
                     queue.append(node.left)
                 if node.right:
@@ -106,7 +106,7 @@ class Solution(object):
         return root
 
 
-# best solution
+# best solution -> Iterative
 # time O(n)
 # space O(1)
 class Solution(object):
@@ -120,7 +120,7 @@ class Solution(object):
 
         leftmost = root
 
-        # if leftmost.left is none, then we are in the last level which is already connected
+        # if leftmost.left is none, then we are in the last level which is already connected because it is a perfect binary tree
         while leftmost.left:
             head = leftmost
             while head:
@@ -139,5 +139,23 @@ class Solution(object):
         return root
 
 
-# constant memory -> https://leetcode.com/problems/populating-next-right-pointers-in-each-node/discuss/37484/7-lines-iterative-real-O(1)-space
+# Recursive
+# time O(n)
+# space O(1) since in the problem stack space is not counted
+class Solution:
+    def connect(self, root: "Node") -> "Node":
+        def helper(node):
+            if not node:
+                return
 
+            if node.left:
+                node.left.next = node.right
+            if node.next and node.right:
+                node.right.next = node.next.left
+
+            helper(node.left)
+            helper(node.right)
+
+        head = root
+        helper(head)
+        return root

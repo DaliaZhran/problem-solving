@@ -18,35 +18,34 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
+
+# iterative
+# # we can iterate the tree in preorder but little different: root --> right --> left
 class Solution(object):
-    # iterative
-    # we can iterate the tree in preorder but little different: root --> right --> left
     def postorderTraversal(self, root):
         """
         :type root: TreeNode
         :rtype: List[int]
         """
-        res = []
-        toVisit = []
-
+        res = deque()
+        stack = deque()
         curr = root
-        while curr or toVisit:
+        while curr or stack:
             while curr:
-                toVisit.append(curr)  # append node then append all its rights
-                res.insert(0, curr.val)  # append curr node value because it should be at the end, then all rights before it, then lefts
+                stack.append(curr)
+                res.appendleft(curr.val)  # append curr node value because it should be at the end, then all rights before it, then lefts
                 curr = curr.right
 
-            curr = toVisit.pop()
-            # res.append(curr.val) # this is not correct, because postorder is left -> right -> node
+            curr = stack.pop()
             curr = curr.left
-
         return res
 
 
+# A more intuitive iterative solution
 class Solution:
-    # a better way for iterative way
     def postorderTraversal(self, root):
-        traversal, stack = [], [(root, False)]
+        traversal = []
+        stack = [(root, False)]
         while stack:
             node, visited = stack.pop()
             if node:
@@ -62,14 +61,14 @@ class Solution:
         return traversal
 
 
+# Reversed postorder (same idea as preorder) -> node -> right -> left
 class Solution:
-    # reversed postorder (same idea as preorder) -> node -> right -> left
     def postorderTraversal(self, root):
         traversal, stack = [], [root]
         while stack:
             node = stack.pop()
             if node:
-                # pre-order, right first
+                # in pre-order, right is added to stack first
                 traversal.append(node.val)
                 stack.append(node.left)
                 stack.append(node.right)
@@ -78,8 +77,8 @@ class Solution:
         return traversal[::-1]
 
 
+# Recursive
 class Solution(object):
-    # Recursive
     def postorderTraversal(self, root):
         """
         :type root: TreeNode
@@ -98,12 +97,26 @@ class Solution(object):
         return res
 
 
+# This solution does not work because postorderTraversal gets called multiple times and nodes does not get re-instantiated
+class Solution:
+    nodes = []
+
+    def postorderTraversal(self, root: TreeNode) -> List[int]:
+        if not root:
+            return []
+        self.postorderTraversal(root.left)
+        self.postorderTraversal(root.right)
+        self.nodes.append(root.val)
+        return self.nodes
+
+
+# Recursive again without passing res []
 class Solution(object):
-    # recursive again without passing res []
     def postorderTraversal(self, root):
         """
         :type root: TreeNode
         :rtype: List[int]
         """
-        return self.postorderTraversal(root.left) + self.postorderTraversal(root.right) + [root.val] if root else []
-
+        if not root:
+            return []
+        return self.postorderTraversal(root.left) + self.postorderTraversal(root.right) + [root.val]

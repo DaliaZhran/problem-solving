@@ -1,6 +1,6 @@
 # https://leetcode.com/problems/find-leaves-of-binary-tree/
-
-# Given a binary tree, collect a tree's nodes as if you were doing this: Collect and remove all leaves, repeat until the tree is empty.
+"""
+Given a binary tree, collect a tree's nodes as if you were doing this: Collect and remove all leaves, repeat until the tree is empty.
 
 
 # Example:
@@ -14,7 +14,7 @@
 #       4   5
 
 # Output: [[4,5,3],[2],[1]]
-
+"""
 
 # Definition for a binary tree node.
 # class TreeNode(object):
@@ -23,26 +23,24 @@
 #         self.left = left
 #         self.right = right
 
-# DFS (calculate the height from bottom)
-class Solution(object):
-    def findLeaves(self, root):
-        """
-        :type root: TreeNode
-        :rtype: List[List[int]]
-        """
-
-        def findLeavesDFS(node):
+# Postorder DFS (calculate the height from bottom)
+# Time : O(N)
+# Space : O(H) where H is height of the tree
+class Solution:
+    def findLeaves(self, root: TreeNode) -> List[List[int]]:
+        def helper(node, res):
             if not node:
                 return -1
-            level = 1 + max(findLeavesDFS(node.left), findLeavesDFS(node.right))
+            left = helper(node.left, res)
+            right = helper(node.right, res)
+            level = 1 + max(left, right)
 
-            if len(self.res) == level:
-                self.res.append([])
-            self.res[level].append(node.val)
+            if len(res) == level:
+                res.append([])
+            res[level].append(node.val)
 
             return level
 
-        self.res = []
-        findLeavesDFS(root)
-        return self.res
-
+        res = []
+        helper(root, res)
+        return res

@@ -42,15 +42,15 @@ class Solution(object):
         :rtype: List[int]
         """
         res = []
-        toVisit = []  # stack
+        stack = []
 
         curr = root
-        while curr or toVisit:
+        while curr or stack:
             while curr:
-                toVisit.append(curr)
+                stack.append(curr)
                 curr = curr.left
 
-            curr = toVisit.pop()
+            curr = stack.pop()
             res.append(curr.val)
             curr = curr.right
         return res

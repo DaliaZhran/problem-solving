@@ -1,4 +1,5 @@
 # https://leetcode.com/problems/path-sum/
+"""
 # Given a binary tree and a sum, determine if the tree has a root-to-leaf path such that adding up all the values along the path equals the given sum.
 
 # Note: A leaf is a node with no children.
@@ -15,17 +16,17 @@
 #  /  \      \
 # 7    2      1
 # return true, as there exist a root-to-leaf path 5->4->11->2 which sum is 22.
+"""
 
-
+# DFS or Recursive -> top down approach
 class Solution(object):
-    # DFS or Recursive -> top down approach
     def hasPathSum(self, root, sum):
         """
         :type root: TreeNode
         :type sum: int
         :rtype: bool
         """
-        # we can use the hasPathSum function directly and substract the node val from the target sum until we find a node with the remaining sum
+
         def hasPathSumHelper(root, targetSum, currentSum):
             if not root:
                 return False
@@ -36,7 +37,24 @@ class Solution(object):
 
         return hasPathSumHelper(root, sum, 0)
 
-    # DFS with stack
+
+# DFS or Recursive -> different implementation with no helper function
+class Solution:
+    def hasPathSum(self, root, sum):
+        """
+        :type root: TreeNode
+        :type sum: int
+        :rtype: bool
+        """
+        if not root:
+            return False
+        if not root.left and not root.right and sum - root.val == 0:
+            return True
+        return self.hasPathSum(root.left, sum - root.val) or self.hasPathSum(root.right, sum - root.val)
+
+
+# DFS with stack
+class Solution(object):
     def hasPathSum(self, root, sum):
         stack = [(root, sum)]
         while stack:
@@ -46,12 +64,13 @@ class Solution(object):
                     return True
                 stack.append((root.right, currentSum - root.val))
                 stack.append((root.left, currentSum - root.val))
-            else:
-                continue
+
         return False
 
-    # BFS Solution with Queue -> didnt understand
-    # https://leetcode.com/problems/path-sum/discuss/36486/Python-solutions-(DFS-recursively-DFS%2Bstack-BFS%2Bqueue)
+
+# BFS Solution - same idea as dfs since we visit all nodes and check sum at all leaves until we reach the target
+# DFS is usually better since we can reach faster than BFS
+class Solution(object):
     def hasPathSum(self, root, sum):
         if not root:
             return False
@@ -65,3 +84,6 @@ class Solution(object):
             if curr.right:
                 queue.append((curr.right, val - curr.right.val))
         return False
+
+
+# https://leetcode.com/problems/path-sum/discuss/36486/Python-solutions-(DFS-recursively-DFS%2Bstack-BFS%2Bqueue)

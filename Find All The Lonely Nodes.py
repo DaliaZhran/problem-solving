@@ -1,9 +1,10 @@
 # https://leetcode.com/problems/find-all-the-lonely-nodes/
 
-# In a binary tree, a lonely node is a node that is the only child of its parent node. The root of the tree is not lonely because it does not have a parent node.
+"""
+In a binary tree, a lonely node is a node that is the only child of its parent node. The root of the tree is not lonely because it does not have a parent node.
 
-# Given the root of a binary tree, return an array containing the values of all lonely nodes in the tree. Return the list in any order.
-
+Given the root of a binary tree, return an array containing the values of all lonely nodes in the tree. Return the list in any order.
+"""
 
 # Definition for a binary tree node.
 # class TreeNode(object):
@@ -40,32 +41,26 @@ class Solution(object):
         return res
 
 
-# DFS + recursive
+# Recursive Preorder DFS
 # time: O(n)
-# memory: O(1) ignoring res memory and used stack for recursion, otherwise it is O(n)
-class Solution(object):
-    def getLonelyNodes(self, root):
-        """
-        :type root: TreeNode
-        :rtype: List[int]
-        """
-
-        def getLonelyNodesHelper(node):
+# memory: O(1) ignoring res memory and used stack for recursion, otherwise it is O(H)
+class Solution:
+    def getLonelyNodes(self, root: TreeNode) -> List[int]:
+        def getLonelyNodesHelper(node, res):
             if not node:
                 return
-            if node.left and node.right:
-                getLonelyNodesHelper(node.left)
-                getLonelyNodesHelper(node.right)
-            elif node.left and not node.right:
-                self.res.append(node.left.val)
-                getLonelyNodesHelper(node.left)
-            elif not node.left and node.right:
-                self.res.append(node.right.val)
-                getLonelyNodesHelper(node.right)
+            if not node.left and not node.right:
+                return
+            if not node.left or not node.right:
+                lonely_node = node.left or node.right
+                res.append(lonely_node.val)
 
-        self.res = []
-        getLonelyNodesHelper(root)
-        return self.res
+            getLonelyNodesHelper(node.left, res)
+            getLonelyNodesHelper(node.right, res)
+
+        res = []
+        getLonelyNodesHelper(root, res)
+        return res
 
 
 # DFS + recursive + top down approach

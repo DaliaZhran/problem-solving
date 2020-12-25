@@ -73,18 +73,15 @@ class Solution(object):
         """
         if not root:
             return TreeNode(val)
-
-        node = root
-        while node:
-            if node.val > val:
-                if not node.left:
-                    node.left = TreeNode(val)
+        curr = root
+        while curr:
+            if val > curr.val:
+                if not curr.right:
+                    curr.right = TreeNode(val)
                     return root
-                else:
-                    node = node.left
+                curr = curr.right
             else:
-                if not node.right:
-                    node.right = TreeNode(val)
+                if not curr.left:
+                    curr.left = TreeNode(val)
                     return root
-                else:
-                    node = node.right
+                curr = curr.left

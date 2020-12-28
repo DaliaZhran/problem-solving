@@ -62,6 +62,7 @@ class Solution:
                 return
             curr_path.append(node.val)
             if not node.left and not node.right and sum == node.val:
+                # we need to copy the list because if we did not we would be appending a reference that changes
                 res.append(list(curr_path))
             else:
                 pathSumHelper(node.left, sum - node.val, curr_path, res)

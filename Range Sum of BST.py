@@ -1,13 +1,14 @@
 # https://leetcode.com/problems/range-sum-of-bst/
 
-# Given the root node of a binary search tree, return the sum of values of all nodes with value between L and R (inclusive).
-# The binary search tree is guaranteed to have unique values.
+"""
+Given the root node of a binary search tree, return the sum of values of all nodes with value between L and R (inclusive).
+The binary search tree is guaranteed to have unique values.
 
-# Example 1:
+Example 1:
 
-# Input: root = [10,5,15,3,7,null,18], L = 7, R = 15
-# Output: 32
-
+Input: root = [10,5,15,3,7,null,18], L = 7, R = 15
+Output: 32
+"""
 
 # Definition for a binary tree node.
 # class TreeNode(object):
@@ -16,7 +17,9 @@
 #         self.left = left
 #         self.right = right
 
-# Inorder Traversal - Recursion
+# Inorder Traversal
+# Time : O(N)
+# Space : O(H)
 class Solution(object):
     sum = 0
 
@@ -38,9 +41,22 @@ class Solution(object):
         return self.sum
 
 
+# Preorder Traversal
+# Time : O(N)
+# Space : O(H)
+class Solution:
+    def rangeSumBST(self, node: TreeNode, low: int, high: int) -> int:
+        if not node:
+            return 0
+        if node.val >= low and node.val <= high:
+            return node.val + self.rangeSumBST(node.left, low, high) + self.rangeSumBST(node.right, low, high)
+
+        return self.rangeSumBST(node.left, low, high) + self.rangeSumBST(node.right, low, high)
+
+
 # getting adv of BST and check for boundaries and Divide
 # Time: O(n)
-# space: O(h)
+# space: O(H)
 class Solution(object):
     sum = 0
 
@@ -71,3 +87,16 @@ class Solution(object):
 
         return self.sum
 
+
+class Solution:
+    def rangeSumBST(self, node: TreeNode, low: int, high: int) -> int:
+        if not node:
+            return 0
+        if node.val >= low and node.val <= high:
+            return node.val + self.rangeSumBST(node.left, low, high) + self.rangeSumBST(node.right, low, high)
+        elif node.val < low:
+            return self.rangeSumBST(node.right, low, high)
+        elif node.val > high:
+            return self.rangeSumBST(node.left, low, high)
+
+        return self.rangeSumBST(node.left, low, high) + self.rangeSumBST(node.right, low, high)

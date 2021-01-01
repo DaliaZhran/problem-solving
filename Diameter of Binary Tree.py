@@ -22,21 +22,23 @@
 
 # DFS - bottom up approach
 class Solution(object):
+    diameter = 0
+
     def diameterOfBinaryTree(self, root):
         """
         :type root: TreeNode
         :rtype: int
         """
 
-        def diameterOfBinaryTreeHelper(root):
+        def depth(root):
             if not root:
                 return 0
-
-            left = diameterOfBinaryTreeHelper(root.left)
-            right = diameterOfBinaryTreeHelper(root.right)
-            self.answer = max(left + right + 1, self.answer)
+            left = depth(root.left)
+            right = depth(root.right)
+            # path
+            self.diameter = max(self.diameter, left + right)
+            # depth
             return max(left, right) + 1
 
-        self.answer = 1
-        diameterOfBinaryTreeHelper(root)
-        return self.answer - 1
+        depth(root)
+        return self.diameter

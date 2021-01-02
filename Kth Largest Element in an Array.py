@@ -12,8 +12,9 @@ Output: 5
 
 from heapq import *
 
-# time -> O(N * log k)
-# space -> O(k)
+# idea is to keep only the k large elements in a heap and the smallest one would be our target
+# Time -> O(N * log k)
+# Space -> O(k)
 class Solution:
     def findKthLargest(self, nums: List[int], k: int) -> int:
         max_heap = []

@@ -26,7 +26,35 @@ from Queue import PriorityQueue
 #         self.val = val
 #         self.next = next
 
-# Using priority queue
+# * Approach 1: Brute Force
+# Time -> O(NlogN) where N is the total number of nodes
+# Space -> O(N)
+class Solution(object):
+    def mergeKLists(self, lists):
+        """
+        :type lists: List[ListNode]
+        :rtype: ListNode
+        """
+        self.nodes = []
+        head = point = ListNode(0)
+        for l in lists:
+            while l:
+                self.nodes.append(l.val)
+                l = l.next
+        for x in sorted(self.nodes):
+            point.next = ListNode(x)
+            point = point.next
+        return head.next
+
+
+# * Approach 2: Compare one by one
+# Time complexity : O(kN) where k is the number of linked lists.
+# Space : O(n) and can be O(1)
+
+
+# * Approach 3: priority queue
+# Time -> O(NlogN) where N is the total number of nodes
+# Space -> O(N)
 class Solution(object):
     def mergeKLists(self, lists):
         """
@@ -50,7 +78,7 @@ class Solution(object):
 
         return head.next
 
-    # same with a little difference
+    # same but with appending all nodes in the heap before starting to process it
     def mergeKLists(self, lists):
         """
         :type lists: List[ListNode]
@@ -71,7 +99,7 @@ class Solution(object):
         return head.next
 
 
-# same idea, another implementation using heap
+# same idea, another implementation using heap -> heap is faster than priority queue since it does not care for thread locking
 class Solution(object):
     # best implementation
     # space -> O(k) where k is the len(lists)
@@ -118,4 +146,39 @@ class Solution(object):
             dummy.next = node
             dummy = dummy.next
 
+        return head.next
+
+
+# * Approach 4: Merge lists one by one
+# Time complexity : O(kN) where k is the number of linked lists.
+# Space complexity : O(1)
+class Solution(object):
+    def mergeKLists(self, lists):
+        """
+        :type lists: List[ListNode]
+        :rtype: ListNode
+        """
+        amount = len(lists)
+        interval = 1
+        while interval < amount:
+            for i in range(0, amount - interval, interval * 2):
+                lists[i] = self.merge2Lists(lists[i], lists[i + interval])
+            interval *= 2
+        return lists[0] if amount > 0 else None
+
+    def merge2Lists(self, l1, l2):
+        head = point = ListNode(0)
+        while l1 and l2:
+            if l1.val <= l2.val:
+                point.next = l1
+                l1 = l1.next
+            else:
+                point.next = l2
+                l2 = l1
+                l1 = point.next.next
+            point = point.next
+        if not l1:
+            point.next = l2
+        else:
+            point.next = l1
         return head.next

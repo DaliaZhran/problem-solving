@@ -18,6 +18,8 @@ Output: 105.00000
 Explanation: We pay 70 to 0-th worker and 35 to 2-th worker.
 """
 
+
+# idea is to start with the min ratio and then move to larger ones while minimizing the sum of qualities
 # Time Complexity: O(NlogN), where N is the number of workers.
 # Space Complexity: O(N).
 class Solution(object):
@@ -28,16 +30,17 @@ class Solution(object):
         :type K: int
         :rtype: float
         """
-        workers = sorted((float(w) / q, q) for w, q in zip(wage, quality))
-        res = float("inf")
-        sum_qualities = 0
+        workers = [(float(w) / q, q) for w, q in zip(wage, quality)]
         max_heap = []
+        min_wages = float("inf")
+        sum_qualities = 0
 
-        for ratio, q in workers:
+        for ratio, q in sorted(workers):
             heappush(max_heap, -q)
             sum_qualities += q
             if len(max_heap) > K:
-                sum_qualities += heappop(max_heap)
+                sum_qualities += heappop(max_heap)  # here we + because push negative qualities to the heap
             if len(max_heap) == K:
-                res = min(res, sum_qualities * ratio)
-        return res
+                min_wages = min(min_wages, sum_qualities * ratio)
+
+        return min_wages

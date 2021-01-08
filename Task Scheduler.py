@@ -21,7 +21,7 @@ from heapq import heappop, heappush
 from collections import deque
 
 # Time -> O(N)
-# space -> O(1)
+# space -> O(1) since tasks are only english alphabet so heap and map are of O(26) max
 class Solution(object):
     def leastInterval(self, tasks, n):
         """
@@ -39,21 +39,24 @@ class Solution(object):
 
         interval_cnt = 0
         while max_heap:
+            # we need waiting queue because we need to consider all tasks before adding the current task again
+            # if we have task ['A','A','A','B'] and we add the A again to the max_heap, we will have more idle spaces
+            # than we should so we need to separate them
             wait_queue = deque()
-            k = n + 1
+            k = n + 1  # n + 1 because there should be n places distance + 1 for the task
             while k > 0 and max_heap:
                 freq, task = heappop(max_heap)
                 interval_cnt += 1
-                if -freq > 1:
+                if -freq + 1 > 0:
                     wait_queue.append((freq + 1, task))
                 k -= 1
 
-            # we add the rest of the items to the max heap if there are any
+            # we add the rest of the items \to the max heap if there are any
             # then we check if k > 0, we need to add idle intervals to the interval_cnt
             for freq, task in wait_queue:
                 heappush(max_heap, (freq, task))
 
-            if max_heap:
+            if k and max_heap:
                 interval_cnt += k
 
         return interval_cnt
@@ -73,7 +76,7 @@ class Solution(object):
         frequencies = [v for k, v in sorted(frequencies.items(), key=lambda item: item[1])]
         len_tasks = sum(frequencies)
         max_freq = frequencies.pop()
-        idle_time = (max_freq - 1) * n
+        idle_time = (max_freq - 1) * n  # max idle time
 
         while frequencies and idle_time > 0:
             idle_time -= min(max_freq - 1, frequencies.pop())  # we use the min now because we can get the max number more than once so we need to substract 1

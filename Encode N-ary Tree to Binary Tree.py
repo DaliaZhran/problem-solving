@@ -19,62 +19,72 @@ class TreeNode(object):
         self.right = None
 """
 
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val=None, children=None):
+        self.val = val
+        self.children = children
+"""
 
+"""
+# Definition for a binary tree node.
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+"""
+
+
+# BFS
+# Time : O(N) for both functions
+# Space : O(N) for both functions
 class Codec:
-    def encode(self, root):
-        """Encodes an n-ary tree to a binary tree.
-        :type root: Node
-        :rtype: TreeNode
-        """
+    # Encodes an n-ary tree to a binary tree.
+    def encode(self, root: "Node") -> TreeNode:
         if not root:
             return None
-
-        rootNode = TreeNode(root.val)
-        queue = deque([(rootNode, root)])
-
+        root_node = TreeNode(root.val)
+        queue = deque([(root_node, root)])
         while queue:
-            parent, curr = queue.popleft()
-            prevBNode = None
-            headBNode = None
+            head, curr = queue.popleft()
+            prev_binary_node = None
+            head_binary_node = None
 
             for child in curr.children:
-                newBNode = TreeNode(child.val)
-                if prevBNode:
-                    prevBNode.right = newBNode
+                new_binary_node = TreeNode(child.val)
+                if prev_binary_node:
+                    prev_binary_node.right = new_binary_node
                 else:
-                    headBNode = newBNode
+                    head_binary_node = new_binary_node
+                prev_binary_node = new_binary_node
+                queue.append((new_binary_node, child))
 
-                prevBNode = newBNode
-                queue.append((newBNode, child))
-            parent.left = headBNode
+            head.left = head_binary_node
 
-        return rootNode
+        return root_node
 
-    def decode(self, data):
-        """Decodes your binary tree to an n-ary tree.
-        :type data: TreeNode
-        :rtype: Node
-        """
+    # Decodes your binary tree to an n-ary tree.
+    def decode(self, data: TreeNode) -> "Node":
         if not data:
             return None
 
-        rootNode = Node(data.val, [])
-
-        queue = deque([(rootNode, data)])
+        root_node = Node(data.val, [])
+        queue = deque([(root_node, data)])
 
         while queue:
-            parent, curr = queue.popleft()
+            n_ary_node, b_node = queue.popleft()
+            child = b_node.left
 
-            firstChild = curr.left
-            sibling = firstChild
+            while child:
+                new_child = Node(child.val, [])
+                n_ary_node.children.append(new_child)
+                if child.left:
+                    queue.append((new_child, child))
+                child = child.right
 
-            while sibling:
-                newNode = Node(sibling.val, [])
-                parent.children.append(newNode)
-                queue.append((newNode, sibling))
-                sibling = sibling.right
-
-        return rootNode
+        return root_node
 
 
 # Your Codec object will be instantiated and called as such:

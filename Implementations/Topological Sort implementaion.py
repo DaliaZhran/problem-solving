@@ -18,7 +18,7 @@ class Graph:
         # initialize indegree of each vertex by 0
         self.indegree = [0] * N
 
-        # add edges to the undirected graph
+        # add edges to the directed graph
         for (src, dest) in edges:
 
             # add an edge from source to destination
@@ -32,7 +32,7 @@ class Graph:
 def doTopologicalSort(graph, N):
 
     # list to store the sorted elements
-    L = []
+    result = []
 
     # get in-degree information of the graph
     indegree = graph.indegree
@@ -42,48 +42,28 @@ def doTopologicalSort(graph, N):
 
     while S:
 
-        # remove a node n from S
-        n = S.pop()
+        # remove a node from S
+        node = S.pop()
 
-        # add n to tail of L
-        L.append(n)
+        # add node to tail of result
+        result.append(node)
 
-        for m in graph.adjList[n]:
+        for adj_node in graph.adjList[node]:
 
-            # remove edge from n to m from the graph
-            indegree[m] = indegree[m] - 1
+            # remove edge from node to adj_node from the graph
+            indegree[adj_node] -= 1
 
-            # if m has no other incoming edges then
-            # insert m into S
-            if indegree[m] == 0:
-                S.append(m)
+            # if adj_node has no other incoming edges then
+            # insert adj_node into S
+            if indegree[adj_node] == 0:
+                S.append(adj_node)
 
-    # if graph has edges then graph has at least one cycle
+    # if graph still has edges then graph has at least one cycle
     for i in range(N):
         if indegree[i]:
             return None
 
-    return L
-
-
-# if __name__ == "__main__":
-
-#     # List of graph edges as per above diagram
-#     edges = [(0, 6), (1, 2), (1, 4), (1, 6), (3, 0), (3, 4), (5, 1), (7, 0), (7, 1)]
-
-#     # Set number of vertices in the graph
-#     N = 8
-
-#     # create a graph from edges
-#     graph = Graph(edges, N)
-
-#     # Perform Topological Sort
-#     L = doTopologicalSort(graph, N)
-
-#     if L:
-#         print(L)  # print topological order
-#     else:
-#         print("Graph has at least one cycle. Topological sorting is not possible.")
+    return result
 
 
 """ DFS """
@@ -111,3 +91,22 @@ def dfs(i, node, V, orderings, graph):
     orderings[i] = node
     return i - 1
 
+
+if __name__ == "__main__":
+
+    # List of graph edges as per above diagram
+    edges = [(0, 6), (1, 2), (1, 4), (1, 6), (3, 0), (3, 4), (5, 1), (7, 0), (7, 1)]
+
+    # Set number of vertices in the graph
+    N = 8
+
+    # create a graph from edges
+    graph = Graph(edges, N)
+
+    # Perform Topological Sort
+    L = doTopologicalSort(graph, N)
+
+    if L:
+        print(L)  # print topological order
+    else:
+        print("Graph has at least one cycle. Topological sorting is not possible.")

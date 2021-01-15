@@ -61,7 +61,7 @@ class Solution(object):
 
         for i in range(1, n - 1):
             water += min(left_max[i], right_max[i]) - height[i]
-
+            
         return water
 
 

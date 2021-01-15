@@ -8,9 +8,9 @@ Example 1:
 Input: [[0, 30],[5, 10],[15, 20]]
 Output: 2
 """
+
 from collections import defaultdict
 from heapq import heappop, heappush
-from typing import DefaultDict
 
 
 # * Approach 1: Heap
@@ -95,6 +95,5 @@ class Solution:
             rooms += mp[k]
 
         return max_needed
-
 
 # https://leetcode.com/problems/meeting-rooms-ii/discuss/203658/HashMapTreeMap-resolves-Scheduling-Problem

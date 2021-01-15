@@ -27,30 +27,59 @@ from collections import deque
 #         self.left = left
 #         self.right = right
 
-# BFS
-# it depends column index for each node -> left_child = parent_index * 2 and right_child = parent_index * 2 + 1
-class Solution(object):
-    def widthOfBinaryTree(self, root):
-        """
-        :type root: TreeNode
-        :rtype: int
-        """
+# Intuitive BFS - Time Limit Exceeded
+class Solution:
+    def widthOfBinaryTree(self, root: TreeNode) -> int:
         if not root:
             return 0
-        queue = deque([(root, 0)])
-        maxWidth = 0
-        while queue:
-            levelSize = len(queue)  # this also can be used  newLevel = [] or use a dummy node to separate levels
-            maxWidth = max(maxWidth, queue[-1][1] - queue[0][1] + 1)  # get width from col index of the level boundaries (most left and most right)
 
-            for _ in range(levelSize):
-                node, colIndex = queue.popleft()
+        stack = deque([root])
+        max_width = 0
+        while stack:
+            next_level = []
+            # remove all none nodes at the end of the level
+            while stack and not stack[-1]:
+                stack.pop()
+            # remove all none nodes at the beginning of the level
+            while stack and not stack[0]:
+                stack.pop(0)
+            # update max_width
+            max_width = max(max_width, len(stack))
+            for node in stack:
+                if node:
+                    next_level.append(node.left)
+                    next_level.append(node.right)
+                else:
+                    # we need to keep track of the none nodes in between our first and last not None nodes
+                    next_level.append(None)
+                    next_level.append(None)
+            stack = next_level
+        return max_width
+
+
+# BFS
+# it depends column index for each node -> left_child = parent_index * 2 and right_child = parent_index * 2 + 1
+# Time : O(N)
+# Space -> O(N/2)
+class Solution:
+    def widthOfBinaryTree(self, root: TreeNode) -> int:
+        if not root:
+            return 0
+
+        curr_level = deque([(root, 1)])
+        max_width = 0
+        while curr_level:
+            next_level = []
+            # get width from order of the level boundaries (most left and most right)
+            max_width = max(max_width, curr_level[-1][1] - curr_level[0][1] + 1)
+            for node, curr_order in curr_level:
                 if node.left:
-                    queue.append((node.left, colIndex * 2))  # append left child with its column index given the parent index
+                    # append left child with its order given the parent index
+                    next_level.append((node.left, 2 * curr_order))
                 if node.right:
-                    queue.append((node.right, colIndex * 2 + 1))
-
-        return maxWidth
+                    next_level.append((node.right, 2 * curr_order + 1))
+            curr_level = next_level
+        return max_width
 
 
 # DFS -> Side Effect Recursion
@@ -63,19 +92,19 @@ class Solution(object):
         :rtype: int
         """
 
-        def DFS(node, depth, colIndex):
+        def DFS(node, level, order):
             if not node:
                 return
-            if depth not in self.levelsMostLeft:
-                self.levelsMostLeft[depth] = colIndex
-            self.maxWidth = max(self.maxWidth, colIndex - self.levelsMostLeft[depth] + 1)
-            DFS(node.left, depth + 1, colIndex * 2)
-            DFS(node.right, depth + 1, colIndex * 2 + 1)
+            if level not in self.levels_most_left:
+                self.levels_most_left[level] = order
+            self.max_width = max(self.max_width, order - self.levels_most_left[level] + 1)
+            DFS(node.left, level + 1, order * 2)
+            DFS(node.right, level + 1, order * 2 + 1)
 
         if not root:
             return 0
 
-        self.maxWidth = 0
-        self.levelsMostLeft = {}
-        DFS(root, 0, 0)
-        return self.maxWidth
+        self.max_width = 0
+        self.levels_most_left = {}
+        DFS(root, 0, 1)
+        return self.max_width

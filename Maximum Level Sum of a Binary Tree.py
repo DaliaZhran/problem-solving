@@ -1,9 +1,9 @@
 # https://leetcode.com/problems/maximum-level-sum-of-a-binary-tree/
+"""
+Given the root of a binary tree, the level of its root is 1, the level of its children is 2, and so on.
 
-# Given the root of a binary tree, the level of its root is 1, the level of its children is 2, and so on.
-
-# Return the smallest level X such that the sum of all the values of nodes at level X is maximal.
-
+Return the smallest level X such that the sum of all the values of nodes at level X is maximal.
+"""
 
 from collections import deque
 
@@ -18,27 +18,26 @@ class Solution(object):
         :rtype: int
         """
         if not root:
-            return -1
-        queue = deque([root])
-        maxLevel = [1, root.val]
-        level = 0
-        while queue:
-            # levelSum = sum([n.val for n in queue])
-            levelSum = 0
-            levelSize = len(queue)
-            level += 1
-            for _ in range(levelSize):
-                node = queue.popleft()
-                levelSum += node.val
+            return 0
+        curr_level = [root]
+        level = 1
+        max_level = [1, root.val]  # [max_level_index, max_level_sum]
+        while curr_level:
+            next_level = []
+            curr_sum = 0
+            for node in curr_level:
+                curr_sum += node.val
                 if node.left:
-                    queue.append(node.left)
+                    next_level.append(node.left)
                 if node.right:
-                    queue.append(node.right)
+                    next_level.append(node.right)
 
-            if maxLevel[-1] < levelSum:
-                maxLevel = [level, levelSum]
+            if curr_sum > max_level[1]:
+                max_level = [level, curr_sum]
 
-        return maxLevel[0]
+            level += 1
+            curr_level = next_level
+        return max_level[0]
 
 
 # DFS

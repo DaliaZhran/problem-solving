@@ -8,6 +8,8 @@ Example 1:
 Input: [[0, 30],[5, 10],[15, 20]]
 Output: 2
 """
+
+from collections import defaultdict
 from heapq import heappop, heappush
 
 
@@ -75,5 +77,23 @@ class Solution:
 
 # Approach 1 is better since we are just sorting once and only creating one heap and it would be better if we have incoming times (stream)
 
+
+# Using Map
+# Time : O(NlogN)
+# Space : O(N)
+class Solution:
+    def minMeetingRooms(self, intervals: List[List[int]]) -> int:
+        mp = defaultdict(int)
+        for interval in intervals:
+            mp[interval[0]] += 1
+            mp[interval[1]] -= 1
+
+        rooms = 0
+        max_needed = 0
+        for k in sorted(mp.keys()):
+            max_needed = max(max_needed, rooms)
+            rooms += mp[k]
+
+        return max_needed
 
 # https://leetcode.com/problems/meeting-rooms-ii/discuss/203658/HashMapTreeMap-resolves-Scheduling-Problem

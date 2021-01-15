@@ -1,3 +1,8 @@
+# https://leetcode.com/problems/search-a-2d-matrix/
+
+# Binary Search
+# Time : O(log(cols*rows))
+# Space : O(1)
 class Solution(object):
     def searchMatrix(self, matrix, target):
         """
@@ -6,7 +11,7 @@ class Solution(object):
         :rtype: bool
         """
         if not matrix or not matrix[0]:
-            return False            
+            return False
         start, end = 0, len(matrix[0])
         row = -1
         for i in range(len(matrix)):
@@ -15,7 +20,7 @@ class Solution(object):
                 break
         if row == -1:
             return False
-        
+
         while start <= end:
             mid = (start + end) >> 1
             if matrix[row][mid] == target:
@@ -27,29 +32,26 @@ class Solution(object):
         return False
 
 
-
 # better sol
+# Binary Search
+# Time : O(log(cols*rows))
+# Space : O(1)
 class Solution:
-    # @param matrix, a list of lists of integers
-    # @param target, an integer
-    # @return a boolean
-    # 8:21
-    def searchMatrix(self, matrix, target):
-        if not matrix or target is None:
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        if not matrix:
             return False
+        m = len(matrix)
+        n = len(matrix[0])
 
-        rows, cols = len(matrix), len(matrix[0])
-        low, high = 0, rows * cols - 1
-        
-        while low <= high:
-            mid = (low + high) / 2
-            num = matrix[mid / cols][mid % cols]
-
-            if num == target:
+        left, right = 0, m * n - 1
+        while left <= right:
+            mid = left + (right - left) // 2
+            element = matrix[mid // n][mid % n]
+            if element == target:
                 return True
-            elif num < target:
-                low = mid + 1
+            if element < target:
+                left = mid + 1
             else:
-                high = mid - 1
-        
+                right = mid - 1
+
         return False

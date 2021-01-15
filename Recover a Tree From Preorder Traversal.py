@@ -1,5 +1,4 @@
 # https://leetcode.com/problems/recover-a-tree-from-preorder-traversal/
-# check other solutions b3din
 
 # Definition for a binary tree node.
 class TreeNode(object):
@@ -9,9 +8,9 @@ class TreeNode(object):
         self.right = right
 
 
-# iterative
-# time -> O(n)
-# space -> O(H) -> not sure
+# Iterative
+# time -> O(N)
+# space -> O(N)
 class Solution(object):
     def recoverFromPreorder(self, S):
         """
@@ -21,11 +20,14 @@ class Solution(object):
         stack, i = [], 0
         while i < len(S):
             level, val = 0, ""
+            # calculate the level
             while i < len(S) and S[i] == "-":
                 level, i = level + 1, i + 1
+            # get the value of node
             while i < len(S) and S[i] != "-":
                 val, i = val + S[i], i + 1
-            while len(stack) > level:  # this is to leave only the parent of the current node in the stack -> we remove all added levels
+            # leave only the parent of the current node in the stack
+            while len(stack) > level:
                 stack.pop()
             node = TreeNode(val)
             if stack and stack[-1].left is None:

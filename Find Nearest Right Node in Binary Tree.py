@@ -14,6 +14,7 @@ class TreeNode(object):
         self.right = right
 
 
+# BFS
 # time -> O(N)
 # space -> O(N/2) -> O(N)
 class Solution(object):
@@ -23,34 +24,25 @@ class Solution(object):
         :type u: TreeNode
         :rtype: TreeNode
         """
-        # BFS
         if not root:
-            return root
-        queue = deque([root])
-
-        while queue:
-            newLevel = deque()
-            while queue:
-                node = queue.popleft()
-                if u is node and queue:
-                    # return queue.popleft()
-                    return queue[0]  # better time but worse space (in terms of leetcode)
-                elif u is node and not queue:
-                    return None
+            return []
+        curr_level = deque([root])
+        while curr_level:
+            next_level = deque()
+            while curr_level:
+                node = curr_level.popleft()
+                if node is u:
+                    return None if not curr_level else curr_level[0]
                 if node.left:
-                    newLevel.append(node.left)
+                    next_level.append(node.left)
                 if node.right:
-                    newLevel.append(node.right)
-            queue = newLevel
+                    next_level.append(node.right)
+
+            curr_level = next_level
+
         return None
 
 
-# Definition for a binary tree node.
-# class TreeNode(object):
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
 class Solution(object):
     def findNearestRightNode(self, root, u):
         """
@@ -58,7 +50,6 @@ class Solution(object):
         :type u: TreeNode
         :rtype: TreeNode
         """
-        # BFS
         if not root:
             return root
         queue = deque([root])
@@ -77,3 +68,31 @@ class Solution(object):
                 if node.right:
                     queue.append(node.right)
         return None
+
+
+# DFS
+# Time : O(N)
+# Space : O(H)
+class Solution:
+    def findNearestRightNode(self, root: TreeNode, u: TreeNode) -> TreeNode:
+        def dfs(current_node, depth):
+            nonlocal u_depth, next_node
+            # the depth to look for next node is identified
+            if current_node == u:
+                u_depth = depth
+                return
+            # we're on the level to look for the next node
+            if depth == u_depth:
+                # if this next node is not identified yet
+                if next_node is None:
+                    next_node = current_node
+                return
+            # continue to traverse the tree
+            if current_node.left:
+                dfs(current_node.left, depth + 1)
+            if current_node.right:
+                dfs(current_node.right, depth + 1)
+
+        u_depth, next_node = -1, None
+        dfs(root, 0)
+        return next_node

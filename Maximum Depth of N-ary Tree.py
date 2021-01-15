@@ -18,24 +18,19 @@ class Node(object):
 # recursive
 # * Time complexity : O(N).
 # * Space complexity : O(N) worst case if tree is unbalanced and O(log N) average.
-class Solution(object):
-    def maxDepth(self, root):
-        """
-        :type root: Node
-        :rtype: int
-        """
-        self.answer = 0
-
-        def maxDepthHelper(root, depth):
-            if not root:
+class Solution:
+    def maxDepth(self, root: "Node") -> int:
+        def maxDepthHelper(node, depth):
+            if not node:
                 return 0
-            if not root.children:
-                self.answer = max(self.answer, depth)
-            for child in root.children:
+            if depth > self.max_depth:
+                self.max_depth = depth
+            for child in node.children:
                 maxDepthHelper(child, depth + 1)
 
+        self.max_depth = 0
         maxDepthHelper(root, 1)
-        return self.answer
+        return self.max_depth
 
 
 # iterative DFS

@@ -11,7 +11,9 @@ The string consists of lower English letters only.
 Length of the given string and k will in the range [1, 10000]
 """
 
-
+# Intuition
+# Time : O(N)
+# Space : O(N)
 class Solution(object):
     def reverseStr(self, s, k):
         """
@@ -25,23 +27,14 @@ class Solution(object):
         return "".join(arr)
 
 
+# Recursion
+# Time : O(N)
+# Space : O(N)
 class Solution:
     def reverseStr(self, s: str, k: int) -> str:
-        count = len(s)
+        if len(s) < k:
+            return s[::-1]
+        if len(s) < 2 * k:
+            return s[:k][::-1] + s[k:]
 
-        odd = True
-        res = []
-        start = 0
-        while start < count:
-            # tavel k or less k
-            end = min(start + k, count)
-
-            if odd:
-                res.append(s[start:end][::-1])
-            else:
-                res.append(s[start:end])
-
-            start = end
-            odd = not odd
-
-        return "".join(res)
+        return s[:k][::-1] + s[k : 2 * k] + self.reverseStr(s[2 * k :], k)

@@ -1,6 +1,6 @@
-# time
-# space
+# https://leetcode.com/problems/binary-tree-preorder-traversal/
 
+"""
 # Given a binary tree, return the preorder traversal of its nodes' values.
 
 # Input: [1,null,2,3]
@@ -12,7 +12,7 @@
 
 # Output: [1,2,3]
 # Follow up: Recursive solution is trivial, could you do it iteratively?
-
+"""
 
 # Definition for a binary tree node.
 # class TreeNode(object):
@@ -20,8 +20,17 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
+
+# Recursive
 class Solution(object):
-    # recursive
+    def preorderTraversal(self, root):
+        if not root:
+            return []
+        return [root.val] + self.preorderTraversal(root.left) + self.preorderTraversal(root.right)
+
+
+# Recursive
+class Solution(object):
     def preorderTraversal(self, root):
         """
         :type root: TreeNode
@@ -43,7 +52,9 @@ class Solution(object):
 
         return res
 
-    # iterative
+
+# Iterative
+class Solution(object):
     def preorderTraversal(self, root):
         """
         :type root: TreeNode

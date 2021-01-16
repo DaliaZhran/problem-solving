@@ -18,27 +18,28 @@ A linked list can be reversed either iteratively or recursively. Could you imple
 #         self.val = val
 #         self.next = next
 
-# * iterative
+# * Iterative
+# Time : O(N)
+# Space : O(1)
 class Solution(object):
     def reverseList(self, head):
         """
         :type head: ListNode
         :rtype: ListNode
         """
-        if not head:
-            return None
-        prev = head
-        curr = head.next
-        head.next = None
+        prev = None
+        curr = head
         while curr:
             temp = curr.next
             curr.next = prev
             prev = curr
             curr = temp
-
         return prev
 
 
+# Recursive
+# Time : O(N)
+# Space : O(N) for the recursive stack
 class Solution(object):
     def reverseList(self, head):
         """
@@ -46,7 +47,7 @@ class Solution(object):
         :rtype: ListNode
         """
         if not head or not head.next:
-            return None
+            return head
         curr = self.reverseList(head.next)
         head.next.next = head
         head.next = None

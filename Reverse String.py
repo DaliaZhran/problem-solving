@@ -33,6 +33,16 @@ class Solution:
         helper(0, len(s) - 1)
 
 
+# Another Recursive way -> just for knowledge
+# time : O(N)
+# Space : O(N)
+class Solution:
+    def reverseString(self, s: List[str]) -> None:
+        if s == "":
+            return s
+        return self.reverseString(s[1:]) + s[0]
+
+
 # Iterative
 # Time : O(N)
 # Space : O(1)

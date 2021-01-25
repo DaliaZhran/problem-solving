@@ -58,6 +58,38 @@ class Solution:
         return head.next
 
 
+# Same Idea but avoiding making a new node for each val
+# Time : O(M + N) since max elements in heap is 3 so no cost for pushing and popping
+# Space : O(1) since we only modify pointers
+class Solution:
+    def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
+        heap = []
+        head = dummy = ListNode(0)
+        counter = 0
+        while l1 or l2:
+            if l1:
+                heappush(heap, (l1.val, counter, l1))
+                l1 = l1.next
+                counter += 1
+
+            if l2:
+                heappush(heap, (l2.val, counter, l2))
+                l2 = l2.next
+                counter += 1
+
+            if heap:  # condition can be removed
+                val, cnt, temp = heappop(heap)
+                dummy.next = temp
+                dummy = dummy.next
+
+        while heap:
+            val, cnt, temp = heappop(heap)
+            dummy.next = temp
+            dummy = dummy.next
+
+        return head.next
+
+
 # Approach 2 : Inplace Merging using pointers
 # Time : O(M + N)
 # Space : O(1)
@@ -73,6 +105,23 @@ class Solution:
                 l1 = l1.next
             dummy = dummy.next
 
-        dummy.next = l1 if l1 else l2
+        dummy.next = l1 or l2
 
         return head.next
+
+
+# Modification
+# Time : O(M + N) since we can max go through the whole 2 lists
+# Space : O(M + N) for recursion stack
+class Solution:
+    def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
+        if not l1:
+            return l2
+        elif not l2:
+            return l1
+        elif l1.val < l2.val:
+            l1.next = self.mergeTwoLists(l1.next, l2)
+            return l1
+        else:
+            l2.next = self.mergeTwoLists(l1, l2.next)
+            return l2

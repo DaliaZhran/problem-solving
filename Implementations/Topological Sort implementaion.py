@@ -85,7 +85,7 @@ def TopologicalSort(graph):
 def dfs(i, node, V, orderings, graph):
     V[node] = 1
     for adjNode in graph[node]:
-        if adjNode == 0:
+        if V[adjNode] == 0:
             i = dfs(i, adjNode, V, orderings, graph)
 
     orderings[i] = node

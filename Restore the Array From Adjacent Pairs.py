@@ -12,7 +12,7 @@ class Solution:
             G[n1].append(n2)
             G[n2].append(n1)
 
-        to_visit = deque()
+        to_visit = []
         for n in G:
             if len(G[n]) == 1:
                 to_visit.append((n, None))
@@ -20,7 +20,7 @@ class Solution:
 
         res = []
         while to_visit:
-            node, parent = to_visit.popleft()
+            node, parent = to_visit.pop()
             res.append(node)
             for num in G[node]:
                 if num != parent:

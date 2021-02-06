@@ -22,7 +22,7 @@ class Solution(object):
         """
         nums.sort()
         count = 0
-        for i in xrange(len(nums) - 2):
+        for i in range(len(nums) - 2):
             for j in range(i + 1, len(nums) - 1):
                 max_right_index = self.binarySearch(nums, j, target - nums[i] - nums[j])
                 count += max_right_index - j

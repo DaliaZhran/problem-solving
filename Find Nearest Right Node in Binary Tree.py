@@ -83,8 +83,8 @@ class Solution:
                 return
             # we're on the level to look for the next node
             if depth == u_depth:
-                # if this next node is not identified yet
-                if next_node is None:
+                # this condition is needed because we call left and right branches of the parent and if our target node is left, the function will still go to the right child since it was already called and it also has the same u_depth so we need to avoid overriding our target value
+                if next_node is None:  # our target is just the first node we meet with same depth
                     next_node = current_node
                 return
             # continue to traverse the tree

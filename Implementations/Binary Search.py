@@ -43,8 +43,8 @@ def binary_search(array, target) -> int:
 def binary_search(array, target) -> int:
     left, right = 0, len(array) - 1
     while left < right:
-        mid = left + (right - left) // 2
-        if array[mid] > target:
+        mid = left + (right - left + 1) // 2
+        if array[mid] >= target:
             right = mid - 1
         else:
             left = mid

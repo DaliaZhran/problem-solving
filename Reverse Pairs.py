@@ -12,15 +12,15 @@ Output: 2
 """
 
 # Approach 1: Brute Force [Time Limit Exceeded]
-class Solution(object):
-    def reversePairs(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
+# Time: O(N^2)
+# Space: O(1)
+class Solution:
+    def reversePairs(self, nums: List[int]) -> int:
+        n = len(nums)
         count = 0
-        for i in range(len(nums)):
-            for j in range(i + 1, len(nums)):
+
+        for i in range(n):
+            for j in range(i + 1, n):
                 if nums[i] > 2 * nums[j]:
                     count += 1
         return count

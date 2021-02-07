@@ -32,55 +32,51 @@ class Solution:
 # * Binary Search - 2 passes
 class Solution:
     def searchRange(self, nums: List[int], target: int) -> List[int]:
-        res = [-1, -1]
-        if not nums:
-            return res
+        def find_first_position(start, end):
+            while start < end:
+                mid = start + (end - start) // 2
+                if nums[mid] < target:
+                    start = mid + 1
+                else:
+                    end = mid
+            return start
+
+        def find_last_position(start, end):
+            while start < end:
+                mid = (start + end + 1) // 2
+                if nums[mid] > target:
+                    end = mid - 1
+                else:
+                    start = mid
+            return start
+
         n = len(nums)
-        l, r = 0, n - 1
-        # find start of range
-        while l < r:
-            mid = l + (r - l) // 2
-            if nums[mid] < target:
-                l = mid + 1
-            else:
-                r = mid
-        if nums[l] == target:
-            res[0] = l
-        else:
-            return res
-
-        # find end of range
-        r = n - 1
-        while l < r:
-            mid = l + (r - l + 1) // 2
-            if nums[mid] > target:
-                r = mid - 1
-            else:
-                l = mid
-
-        res[-1] = r
-        return res
+        left = find_first_position(0, n - 1)
+        if left == len(nums) or nums[left] != target:
+            return [-1, -1]
+        right = find_last_position(left, n - 1)
+        return [left, right]
 
 
 # Binary Search - 2 passes - better implementation
 class Solution:
     def searchRange(self, nums: List[int], target: int) -> List[int]:
-        def binarySearch(isLeft):
-            left, right = 0, len(nums)
-            while left < right:
-                mid = left + (right - left) // 2
-                if nums[mid] > target or (isLeft and target == nums[mid]):
-                    right = mid
+        def binary_search(start, end, isLeft):
+            while start < end:
+                mid = start + (end - start) // 2
+                if nums[mid] > target or (isLeft and nums[mid] == target):
+                    end = mid
                 else:
-                    left = mid + 1
-            return left
+                    start = mid + 1
 
-        if not nums:
-            return [-1, -1]
-        left = binarySearch(True)
+            return start
+
+        n = len(nums)
+        left = binary_search(0, n - 1, True)  # find first position
         if left == len(nums) or nums[left] != target:
             return [-1, -1]
-        return [left, binarySearch(False) - 1]
+        right = binary_search(left, n - 1, False) - 1  # find last position -> find smallest number greater than the target and then decrement its index
+        return [left, right]
 
 
 # https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/discuss/14699/Clean-iterative-solution-with-two-binary-searches-(with-explanation)

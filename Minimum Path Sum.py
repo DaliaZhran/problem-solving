@@ -34,4 +34,49 @@ class Solution:
         return dp[-1][-1]
 
 
-# Optimization -> DP 1D
+# Optimization -> DP 1D -> use 2 cols for holding the needed cols only
+# Time: O(mn)
+# Space: O(m)
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        rows = len(grid)
+        cols = len(grid[0])
+
+        cur = [0] * rows  # Vector for current column sums
+        pre = [0] * rows  # Vector for previous column sums
+        pre[0] = grid[0][0]
+
+        for i in range(1, rows):
+            pre[i] = pre[i - 1] + grid[i][0]
+
+        for j in range(1, cols):
+            cur[0] = pre[0] + grid[0][j]
+            for i in range(1, rows):
+                cur[i] = min(cur[i - 1], pre[i]) + grid[i][j]
+
+            pre = cur
+
+        return pre[rows - 1]
+
+
+# Optimization -> DP 1D -> use 1 col for holding the needed sum, sone value before update and one after update
+# Time: O(mn)
+# Space: O(m)
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        rows = len(grid)
+        cols = len(grid[0])
+
+        cur = [0] * rows  # Vector for current column sums
+        pre = [0] * rows  # Vector for previous column sums
+        cur[0] = grid[0][0]
+
+        for i in range(1, rows):
+            cur[i] = cur[i - 1] + grid[i][0]
+
+        for j in range(1, cols):
+            cur[0] = cur[0] + grid[0][j]
+            for i in range(1, rows):
+                cur[i] = min(cur[i - 1], cur[i]) + grid[i][j]
+
+        return cur[rows - 1]

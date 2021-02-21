@@ -27,7 +27,7 @@ Explanation: Cheapest is start on cost[1], pay that cost and go to the top.
 
 # Step 2 - Covert the recurrence relation to recursion
 # Time: O(2^n) -> [Time Limit Exceeded]
-# Space: O(N)
+# Space: O(n)
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
         def minCost(n):
@@ -62,7 +62,7 @@ class Solution:
 
 
 # Step 4 - Optimization 2 - Bottom Up DP - Convert recursion to iteration - Getting rid of recursive stack
-# General Top-Down Approach
+# General Bottom-Up Approach
 # Time: O(N)
 # Space: O(N)
 class Solution:
@@ -89,3 +89,6 @@ class Solution:
             f2 = curr
 
         return min(f1, f2)
+
+
+# For the brute force recursive solution, it is better to use direct recursion instead of side-effect to make it easy to use memoization then

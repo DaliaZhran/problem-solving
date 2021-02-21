@@ -11,7 +11,32 @@ Note: You can only move either down or right at any point in time.
 # Basic Sol with tuning -> https://leetcode.com/problems/minimum-path-sum/discuss/23457/C%2B%2B-DP
 
 
-# DP (2D)
+# Recursive (Brute Force)
+# Time: O(2^max(m,n))
+# Space: O(max(m,n))
+# Implementation can be more clear if we started from the end to (0,0) instead and use direct recursion instead of side effect
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        def helper(i, j, curr):
+            if i == rows - 1 and j == cols - 1:
+                self.min_sum = min(curr + grid[i][j], self.min_sum)
+            elif i == rows or j == cols:
+                return
+            else:
+                helper(i, j + 1, curr + grid[i][j])
+                helper(i + 1, j, curr + grid[i][j])
+
+        rows = len(grid)
+        cols = len(grid[0])
+        self.min_sum = float("inf")
+        helper(0, 0, 0)
+        return self.min_sum
+
+
+# could not apply memoization here
+
+
+# DP (2D) -> Bottom Up
 # Time: O(m * n)
 # Space: O(m * n)
 class Solution:

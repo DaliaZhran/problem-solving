@@ -42,7 +42,7 @@ class Solution:
 # Better for the optimization
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
-        def count_coins(remaining, coin):
+        def count_coins(remaining):
             if remaining < 0:
                 return -1
             if remaining == 0:
@@ -52,7 +52,7 @@ class Solution:
 
             min_cost = float("inf")
             for coin in coins:
-                res = count_coins(remaining - coin, count)
+                res = count_coins(remaining - coin)
                 if res >= 0:
                     min_cost = min(res + 1, min_cost)
 
@@ -71,7 +71,7 @@ class Solution:
 # Space: O(amount)
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
-        def count_coins(remaining, coin):
+        def count_coins(remaining):
             if remaining < 0:
                 return -1
             if remaining == 0:
@@ -81,7 +81,7 @@ class Solution:
 
             min_cost = float("inf")
             for coin in coins:
-                res = count_coins(remaining - coin, count)
+                res = count_coins(remaining - coin)
                 if res >= 0:
                     min_cost = min(res + 1, min_cost)
 

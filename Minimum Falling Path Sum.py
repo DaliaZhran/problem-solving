@@ -57,7 +57,7 @@ class Solution:
         return min_sum
 
 
-# Same as before  but with passing curr sum
+# Same as before but with passing curr sum
 class Solution:
     def minFallingPathSum(self, matrix: List[List[int]]) -> int:
         def min_path(r, c, curr):

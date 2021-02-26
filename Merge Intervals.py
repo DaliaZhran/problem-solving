@@ -56,3 +56,6 @@ class Solution:
 
 # https://leetcode.com/problems/merge-intervals/discuss/21223/Beat-98-Java.-Sort-start-and-end-respectively.
 # https://leetcode.com/problems/merge-intervals/discuss/21227/7-lines-easy-Python
+
+
+# https://leetcode.com/problems/merge-intervals/solution/321556

@@ -97,7 +97,7 @@ class Solution:
             solve(r - 1, c, "U")
             solve(r, c + 1, "R")
             solve(r, c - 1, "L")
-            curr_path.append("0")
+            curr_path.append("0")  # to determine number of backtracks we did
 
         rows = len(grid)
         cols = len(grid[0])

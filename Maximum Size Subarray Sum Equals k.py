@@ -15,26 +15,24 @@ Example 2:
 """
 
 
-class Solution(object):
-    def maxSubArrayLen(self, nums, k):
-        """
-        :type nums: List[int]
-        :type k: int
-        :rtype: int
-        """
-        answer = 0
+# Time: O(n)
+# Space: O(n)
+class Solution:
+    def maxSubArrayLen(self, nums: List[int], k: int) -> int:
+        max_size = 0
         curr_sum = 0
-        prev_sums = defaultdict(int)
-        for right, val in enumerate(nums):
-            curr_sum += val
-            if curr_sum not in prev_sums:
-                prev_sums[curr_sum] = right
+        acc_sums = {}
+
+        for i, num in enumerate(nums):
+            curr_sum += num
+            if curr_sum not in acc_sums:  # we want the furthest sum on the left to increase size
+                acc_sums[curr_sum] = i
             if curr_sum == k:
-                answer = max(answer, right + 1)
-            elif curr_sum - k in prev_sums:
-                answer = max(answer, right - prev_sums[curr_sum - k])
+                max_size = i + 1
+            elif curr_sum - k in acc_sums:
+                max_size = max(max_size, i - acc_sums[curr_sum - k])  # sum[j] - sum[i] = k -> sum[j] - k = sum[i]
 
-        return answer
+        return max_size
 
 
 class Solution(object):
@@ -46,15 +44,14 @@ class Solution(object):
         """
         answer = 0
         curr_sum = 0
-        # prev_sums = defaultdict(int)
-        prev_sums = {0: -1}  # if sum == k, return -1 to add 1 to the right
-        for right, val in enumerate(nums):
+        prev_sums = {0: -1}  # if sum == k, return -1 to just add 1 to the current index
+        for idx, val in enumerate(nums):
             curr_sum += val
             if curr_sum not in prev_sums:
-                prev_sums[curr_sum] = right
+                prev_sums[curr_sum] = idx
             # if curr_sum == k:
-            #     answer = max(answer, right + 1)
+            #     answer = max(answer, idx + 1)
             if curr_sum - k in prev_sums:
-                answer = max(answer, right - prev_sums[curr_sum - k])
+                answer = max(answer, idx - prev_sums[curr_sum - k])
 
         return answer

@@ -30,16 +30,13 @@ Explanation: Cheapest is start on cost[1], pay that cost and go to the top.
 # Space: O(n)
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
-        def minCost(n):
-            if n < 0:
-                return 0
-            elif n < 2:
-                return cost[n]
-            else:
-                return cost[n] + min(minCost(n - 1), minCost(n - 2))
-
+        def helper(i):
+            if i < 2:
+                return cost[i]
+            return cost[i] + min(helper(i-1), helper(i-2))
+        
         n = len(cost)
-        return min(minCost(n - 1), minCost(n - 2))
+        return min(helper(n - 1), helper(n - 2)) # this is the trick here
 
 
 # Step 3 - Optimization 1 - Top Down DP - Add memoization to recursion - From exponential to linear.
@@ -67,13 +64,11 @@ class Solution:
 # Space: O(N)
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
-        dp = [cost[0], cost[1]]
-
+        dp = cost[:]
         for i in range(2, len(cost)):
-            curr = cost[i] + min(dp[i - 1], dp[i - 2])
-            dp.append(curr)
-
+            dp[i] += min(dp[i - 1], dp[i - 2])
         return min(dp[-1], dp[-2])
+        
 
 
 # Step 5 - Optimization 3 - Fine Tuning - Reduce O(n) space to O(1).
@@ -81,14 +76,13 @@ class Solution:
 # Space: O(1)
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
-        n = len(cost)
-        f1, f2 = cost[0], cost[1]
-        for i in range(2, n):
-            curr = cost[i] + min(f1, f2)
-            f1 = f2
-            f2 = curr
-
-        return min(f1, f2)
+        prev0 = cost[0]
+        prev1 = cost[1]
+        for i in range(2, len(cost)):
+            prev0, prev1 = prev1, cost[i] + min(prev0, prev1)
+            
+        return min(prev0, prev1)
+        
 
 
 # For the brute force recursive solution, it is better to use direct recursion instead of side-effect to make it easy to use memoization then

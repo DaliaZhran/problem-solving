@@ -1,21 +1,14 @@
 # https://leetcode.com/problems/climbing-stairs/
 
 
-# Brute Force - Recursive
+# Brute Force - Bottom Up Recursive
 # Time : O(2^n)
 # Space: O(n)
 class Solution:
-    memo = {}
-
     def climbStairs(self, n: int) -> int:
-        def climbStairsRecursive(i):
-            if i > n:
-                return 0
-            if i == n:
-                return 1
-            return climbStairsRecursive(i + 1) + climbStairsRecursive(i + 2)
-
-        return climbStairsRecursive(0)
+        if n < 2:
+            return 1
+        return self.climbStairs(n-1) + self.climbStairs(n-2)
 
 
 # Recursive with Memoization
@@ -23,8 +16,6 @@ class Solution:
 # Space: O(n)
 class Solution:
     def climbStairs(self, n: int) -> int:
-        memo = {}
-
         def climbStairsRecursive(i):
             if i > n:
                 return 0
@@ -33,10 +24,10 @@ class Solution:
             if i in memo:
                 return memo[i]
 
-            ans = climbStairsRecursive(i + 1) + climbStairsRecursive(i + 2)
-            memo[i] = ans
-            return ans
-
+            memo[i] = climbStairsRecursive(i + 1) + climbStairsRecursive(i + 2)
+            return memo[i]
+        
+        memo = {}
         return climbStairsRecursive(0)
 
 
@@ -45,15 +36,11 @@ class Solution:
 # Space: O(n)
 class Solution:
     def climbStairs(self, n: int) -> int:
-        if n <= 1:
-            return n
-        dp = [0] * (n + 1)
-        dp[1] = 1
-        dp[2] = 2
-
-        for i in range(3, n + 1):
-            dp[i] = dp[i - 1] + dp[i - 2]
-
+        if n < 2:
+            return 1
+        dp = [1, 1] + [0] * (n - 1)
+        for i in range(2, n + 1):
+            dp[i] = dp[i-1] + dp[i-2]
         return dp[n]
 
 
@@ -62,18 +49,9 @@ class Solution:
 # Space: O(1)
 class Solution:
     def climbStairs(self, n: int) -> int:
-        if n <= 1:
-            return n
-        if n == 2:
-            return 2
-
-        curr = 0
-        prev1 = 2
-        prev2 = 1
-
-        for i in range(3, n + 1):
-            curr = prev1 + prev2
-            prev2 = prev1
-            prev1 = curr
-
-        return curr
+        if n < 2:
+            return 1
+        prev1 = prev2 = 1
+        for i in range(2, n + 1):
+            prev1, prev2 = prev2, prev1 + prev2
+        return prev2

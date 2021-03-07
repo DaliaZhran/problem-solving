@@ -66,8 +66,6 @@ class Solution:
         return palindromeLength(0, n - 1)
     
 
-
-
 # Bottom Up DP
 # Time: O(n^2) where n is length of s
 # Space: O(n^2)
@@ -88,3 +86,49 @@ class Solution:
                     
         return dp[0][-1]
     
+
+
+# Bottom Up DP - but going down diagonally
+# Time: O(n^2) where n is length of s
+# Space: O(n^2)
+class Solution:
+    def longestPalindromeSubseq(self, s: str) -> int:
+        n = len(s)
+        dp = [[0] * n for _ in range(n)]
+        
+        for i in range(n):
+            dp[i][i] = 1
+        
+        for curr_len in range(2, n + 1): # check every palindormic length
+            for i in range(0 , n - curr_len + 1):
+                j = i + curr_len - 1
+                if s[i] == s[j]:
+                    dp[i][j] = 2 + dp[i + 1][j - 1]
+                else:
+                    dp[i][j] = max(dp[i + 1][j], dp[i][j - 1])        
+                    
+        return dp[0][-1]
+    
+
+
+# Reducing Space
+# Time: O(n^2) where n is length of s
+# Space: O(n)
+class Solution:
+    def longestPalindromeSubseq(self, s: str) -> int:
+        n = len(s)
+        
+        prev_row = [0] * n
+        prev_row[-1] = 1
+        for start_idx in range(n - 1, -1, -1):
+            curr_row = [0] * n
+            curr_row[start_idx] = 1
+            for end_idx in range(start_idx + 1, n):
+                if s[start_idx] == s[end_idx]:
+                    curr_row[end_idx] = 2 + prev_row[end_idx - 1]
+                else:
+                    curr_row[end_idx] = max(prev_row[end_idx], curr_row[end_idx - 1]) 
+            
+            prev_row = curr_row
+                    
+        return curr_row[-1]

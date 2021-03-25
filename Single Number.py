@@ -15,6 +15,7 @@ Output: 1
 
 from collections import defaultdict
 
+
 # time: O(n^2)
 # space: O(n)
 class Solution(object):
@@ -36,13 +37,10 @@ class Solution(object):
 # space: O(n)
 class Solution:
     def singleNumber(self, nums: List[int]) -> int:
-        hash_table = defaultdict(int)
-        for i in nums:
-            hash_table[i] += 1
-
-        for i in hash_table:
-            if hash_table[i] == 1:
-                return i
+        nums = Counter(nums)
+        for n, count in nums.items():
+            if count == 1:
+                return n
 
 
 # time: O(n)

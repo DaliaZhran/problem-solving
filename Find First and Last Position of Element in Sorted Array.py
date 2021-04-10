@@ -79,6 +79,17 @@ class Solution:
         return [left, right]
 
 
+# Using bisect
+class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        n = len(nums)
+        left = bisect.bisect_left(nums, target)  # find first position
+        if left == len(nums) or nums[left] != target:
+            return [-1, -1]
+        right = bisect.bisect_right(nums, target) - 1
+        return [left, right]
+
+
 # https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/discuss/14699/Clean-iterative-solution-with-two-binary-searches-(with-explanation)
 
 # https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/discuss/14701/A-very-simple-Java-solution-with-only-one-binary-search-algorithm

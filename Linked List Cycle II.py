@@ -20,28 +20,36 @@ Notice that you should not modify the linked list.
 
 # time -> O(n)
 # space -> O(1)
-class Solution(object):
-    def detectCycle(self, head):
-        """
-        :type head: ListNode
-        :rtype: ListNode
-        """
-        slow, fast = head, head
-        has_cycle = 0
+class Solution:
+    def detectCycle(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
+            return None
+
+        slow, fast = head, head.next
         while fast and fast.next:
             slow = slow.next
             fast = fast.next.next
-            if slow == fast:
-                has_cycle = 1
+            if fast == slow:
                 break
-        if not has_cycle:
+
+        if not fast or not fast.next:  # no cycle
             return None
 
-        slow = head
+        # get len of cycle
+        slow = slow.next
+        length = 1
+        while slow != fast:
+            slow = slow.next
+            length += 1
+
+        slow, fast = head, head
+        while length:
+            fast = fast.next
+            length -= 1
+
         while slow != fast:
             slow = slow.next
             fast = fast.next
-
         return slow
 
 

@@ -15,13 +15,15 @@ Output: 1->3->5->2->4->NULL
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
-class Solution(object):
-    def oddEvenList(self, head):
-        """
-        :type head: ListNode
-        :rtype: ListNode
-        """
-        if head is None or head.next is None:
+
+# Approach 1: Two lists with alternating flag
+
+# Approach 2
+# Time : O(N)
+# Space : O(1)
+class Solution:
+    def oddEvenList(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
             return head
         odd = head
         even = even_head = head.next

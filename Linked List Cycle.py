@@ -13,19 +13,21 @@ Return true if there is a cycle in the linked list. Otherwise, return false.
 # Approach 2: hare and tortoise
 
 # Definition for singly-linked list.
-# class ListNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
+class ListNode(object):
+    def __init__(self, x):
+        self.val = x
+        self.next = None
 
 
+# Time: O(N + K)
 class Solution(object):
     def hasCycle(self, head):
         """
         :type head: ListNode
         :rtype: bool
         """
-        slow, fast = head, head
+        slow, fast = head, head  # starting point does not make a diff 
+        # slow, fast = head, head.next  # works too
         while fast and fast.next:
             slow = slow.next
             fast = fast.next.next

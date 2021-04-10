@@ -8,8 +8,6 @@ Notice that rotating an array [a[0], a[1], a[2], ..., a[n-1]] 1 time results in 
 
 Given the sorted rotated array nums, return the minimum element of this array.
 
- 
-
 Example 1:
 
 Input: nums = [3,4,5,1,2]
@@ -17,13 +15,14 @@ Output: 1
 Explanation: The original array was [1,2,3,4,5] rotated 3 times.
 """
 
-
+# Modified Binary Search
+# Time: O(log N)
+# Space: O(1)
 class Solution:
     def findMin(self, nums: List[int]) -> int:
         l, r = 0, len(nums) - 1
         if nums[r] >= nums[0]:
             return nums[0]
-
         while l <= r:
             pivot = l + (r - l) // 2
             if nums[pivot] > nums[pivot + 1]:
@@ -35,6 +34,20 @@ class Solution:
                     l = pivot + 1
                 else:
                     r = pivot - 1
+
+
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        l, r = 0, len(nums) - 1
+        if nums[r] >= nums[0]:
+            return nums[0]
+        while l < r:
+            mid = l + (r - l) // 2
+            if nums[mid] > nums[r]:
+                l = mid + 1
+            else:
+                r = mid
+        return nums[l]
 
 
 # good explaination

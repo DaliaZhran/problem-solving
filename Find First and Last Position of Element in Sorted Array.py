@@ -44,10 +44,10 @@ class Solution:
         def find_last_position(start, end):
             while start < end:
                 mid = (start + end + 1) // 2
-                if nums[mid] > target:
-                    end = mid - 1
-                else:
+                if nums[mid] <= target:
                     start = mid
+                else:
+                    end = mid - 1
             return start
 
         n = len(nums)

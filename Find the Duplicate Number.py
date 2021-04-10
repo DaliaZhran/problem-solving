@@ -51,7 +51,7 @@ class Solution(object):
                 return nums[i]
 
 
-# * Modifying the array
+# * Modifying the array -> similiar to cycle sort
 # time -> O(n)
 # space -> O(1)
 class Solution(object):
@@ -114,22 +114,18 @@ class Solution(object):
 # * hare and tortiose algorithm - cycle detection
 # time -> O(n)
 # space -> O(1)
-class Solution(object):
-    def findDuplicate(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
         slow, fast = nums[nums[0]], nums[nums[nums[0]]]
         while slow != fast:
             slow = nums[slow]
             fast = nums[nums[fast]]
-
-        slow = nums[0]
-        while slow != fast:
-            slow = nums[slow]
-            fast = nums[fast]
-
+            if slow == fast:
+                slow = nums[0]
+                while slow != fast:
+                    slow = nums[slow]
+                    fast = nums[fast]
+                return fast
         return fast
 
 

@@ -1,5 +1,17 @@
 # https://leetcode.com/problems/find-smallest-letter-greater-than-target/
 
+# Approach #1: Record Letters Seen [Accepted]
+class Solution(object):
+    def nextGreatestLetter(self, letters, target):
+        seen = set(letters)
+        for i in range(1, 26):
+            cand = chr((ord(target) - ord("a") + i) % 26 + ord("a"))
+            if cand in seen:
+                return cand
+
+
+# Approach #2: Linear Scan [Accepted]
+
 # binary search template II
 class Solution:
     def nextGreatestLetter(self, letters: List[str], target: str) -> str:
@@ -10,9 +22,19 @@ class Solution:
             if letters[mid] <= target:  # we do not want to return the target that is why we used =
                 l = mid + 1
             else:
-                r = mid  # we do not skip the mid here because it may be the greater letter after out target
+                r = mid  # we do not skip the mid here because it may be the greater letter after our target
 
-        return letters[l % n]  # % because problem makes the array like if its circular
+        return letters[l % n]  # % because letters are wrapped around
+
+
+# Binary Search using bisect
+import bisect
+
+
+class Solution(object):
+    def nextGreatestLetter(self, letters, target):
+        index = bisect.bisect(letters, target)
+        return letters[index % len(letters)]
 
 
 # another implementation Template I

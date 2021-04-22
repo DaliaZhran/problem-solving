@@ -1,28 +1,25 @@
+# https://leetcode.com/problems/fruit-into-baskets/
 
-# my sol
-class Solution(object):
-    def totalFruit(self, tree):
-        """
-        :type tree: List[int]
-        :rtype: int
-        """
-        baskets = {}
+
+# Time: O(N)
+# Space: O(1)
+class Solution:
+    def totalFruit(self, tree: List[int]) -> int:
+        fruits = defaultdict(int)
         start, end = 0, 0
-        count = 0
+        
+        max_amount = 0
         while end < len(tree):
-            if tree[end] not in baskets:
-                baskets[tree[end]] = 0
-            baskets[tree[end]] += 1
-            
-            while len(baskets) > 2:
-                baskets[tree[start]] -= 1
-                if baskets[tree[start]] == 0:
-                    del baskets[tree[start]] 
+            fruits[tree[end]] += 1
+            while len(fruits) > 2:
+                fruits[tree[start]] -= 1
+                if fruits[tree[start]] == 0:
+                    del fruits[tree[start]]
                 start += 1
-            
-            count = max(count, end - start + 1)
+            max_amount = max(max_amount, end - start + 1)
             end += 1
-        return count
+        
+        return max_amount
 
 
 # c++ sol but good too ( constant space - linear time)

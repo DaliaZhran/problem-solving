@@ -9,32 +9,26 @@ Input: "eceba"
 Output: 3
 Explanation: t is "ece" which its length is 3.
 """
+from collections import defaultdict
+
 
 # * Sliding Window
 # Time -> O(N)
 # Space -> O(1)
-class Solution(object):
-    def lengthOfLongestSubstringTwoDistinct(self, s):
-        """
-        :type s: str
-        :rtype: int
-        """
-        n = len(s)
-        chars_freq = defaultdict(int)
-        longest_str = 0
+class Solution:
+    def lengthOfLongestSubstringTwoDistinct(self, s: str) -> int:
         start = 0
+        length = 0
+        char_map = defaultdict(int)
+        for end in range(len(s)):
+            char_map[s[end]] += 1
 
-        for end in range(n):
-            right = s[end]
-            chars_freq[right] += 1
-
-            while len(chars_freq) > 2:
-                left = s[start]
+            while len(char_map) > 2:
+                char_map[s[start]] -= 1
+                if char_map[s[start]] == 0:
+                    del char_map[s[start]]
                 start += 1
-                chars_freq[left] -= 1
-                if chars_freq[left] == 0:
-                    del chars_freq[left]
 
-            longest_str = max(longest_str, end - start + 1)
+            length = max(length, end - start + 1)
 
-        return longest_str
+        return length

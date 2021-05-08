@@ -8,23 +8,24 @@ Example 1:
 Input: nums = [1,1,1,2,2,3], k = 2
 Output: [1,2]
 """
-
+from collections import Counter
 from heapq import *
 
 
+# Heap
+# Time: O(nlogk)
+# Space: O(n + k)
 class Solution:
-    def topKFrequent(self, nums, k):
-        freq_map = {}
-        for val in nums:
-            freq_map[val] = freq_map.get(val, 0) + 1
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        freq_map = Counter(nums)
 
         min_heap = []
         for val in freq_map:
             heappush(min_heap, (freq_map[val], val))
             if len(min_heap) > k:
-                heappop(min_heap)  # remove the smallest number so at the end we have only the largest k frequencies
+                heappop(min_heap)
+
         return [x[1] for x in min_heap]
 
 
-s = Solution()
-print(s.topKFrequent([1, 1, 1, 2, 2, 3], 2))
+# Approach 2: Quickselect (Hoare's selection algorithm)

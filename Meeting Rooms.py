@@ -14,7 +14,6 @@ Output: false
 # Space : O(1)
 class Solution:
     def canAttendMeetings(self, intervals: List[List[int]]) -> bool:
-
         for i in range(len(intervals)):
             for j in range(i + 1, len(intervals)):
                 if min(intervals[i][1], intervals[i][1]) > max(intervals[i][0], intervals[i][0]):
@@ -34,6 +33,21 @@ class Solution:
             if intervals[interval][1] > intervals[interval + 1][0]:
                 return False
 
+        return True
+
+
+# sorting by ends
+class Solution:
+    def canAttendMeetings(self, intervals: List[List[int]]) -> bool:
+        if not intervals:
+            return True
+        intervals.sort(key=lambda x: x[1])
+        prev_end = intervals[0][1]
+        for i in range(1, len(intervals)):
+            interval = intervals[i]
+            if interval[0] < prev_end:
+                return False
+            prev_end = interval[1]
         return True
 
 

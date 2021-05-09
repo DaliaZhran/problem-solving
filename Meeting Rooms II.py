@@ -16,25 +16,18 @@ from heapq import heappop, heappush
 # * Approach 1: Heap
 # TIme -> O(NlogN)
 # Space -> O(N)
-class Solution(object):
-    def minMeetingRooms(self, intervals):
-        """
-        :type intervals: List[List[int]]
-        :rtype: int
-        """
-        if not intervals:
-            return 0
+class Solution:
+    def minMeetingRooms(self, intervals: List[List[int]]) -> int:
+        intervals.sort()
+        rooms_allocated = [intervals[0][1]]
 
-        intervals.sort(key=lambda x: x[0])
-        allocated_rooms = []
-        heappush(allocated_rooms, intervals[0][1])
+        for i in range(1, len(intervals)):
+            interval = intervals[i]
+            if interval[0] >= rooms_allocated[0]:
+                heappop(rooms_allocated)
+            heappush(rooms_allocated, interval[1])
 
-        for interval in intervals[1:]:
-            if allocated_rooms[0] <= interval[0]:
-                heappop(allocated_rooms)
-            heappush(allocated_rooms, interval[1])
-
-        return len(allocated_rooms)
+        return len(rooms_allocated)
 
 
 # * Approach 2: Chronological Ordering
@@ -75,8 +68,9 @@ class Solution:
         return used_rooms
 
 
-# Approach 1 is better since we are just sorting once and only creating one heap and it would be better if we have incoming times (stream)
-
+"""
+Approach 1 is better since we are just sorting once and only creating one heap and it would be better if we have incoming times (stream)
+"""
 
 # Using Map
 # Time : O(NlogN)
@@ -95,5 +89,6 @@ class Solution:
             rooms += mp[k]
 
         return max_needed
+
 
 # https://leetcode.com/problems/meeting-rooms-ii/discuss/203658/HashMapTreeMap-resolves-Scheduling-Problem

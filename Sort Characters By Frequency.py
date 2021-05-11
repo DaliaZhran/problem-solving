@@ -15,38 +15,30 @@ Explanation:
 'e' appears twice while 'r' and 't' both appear once.
 So 'e' must appear before both 'r' and 't'. Therefore "eetr" is also a valid answer.
 """
+from collections import Counter, defaultdict
+from heapq import heappop, heappush
+from typing import List
 
-from collections import Counter
 
 # * heap and hashmap
 # time -> O(n) + O(nlogn) -> O(nlogn)
 # space -> O(n) for output
-class Solution(object):
-    def frequencySort(self, s):
-        """
-        :type s: str
-        :rtype: str
-        """
-        count = Counter(s)
-        max_heap = []
-        for ch, freq in count.items():
-            heappush(max_heap, (-freq, ch))
+class Solution:
+    def frequencySort(self, s: str) -> str:
+        chars = Counter(s)
+        heap = []
+        for i, v in chars.items():
+            heappush(heap, (-v, i * v))
 
-        s = []
-        while max_heap:
-            freq, ch = heappop(max_heap)
-            s.append(ch * -freq)
-
-        return "".join(s)
+        res = ""
+        while heap:
+            res += heappop(heap)[1]
+        return res
 
 
-# * another implementation
-class Solution(object):
-    def frequencySort(self, s):
-        """
-        :type s: str
-        :rtype: str
-        """
+# * another implementation using Counter functions
+class Solution:
+    def frequencySort(self, s: str) -> str:
         count = Counter(s)
         s = []
         for ch, freq in count.most_common():
@@ -54,19 +46,19 @@ class Solution(object):
         return "".join(s)
 
 
-# * good O(n) solution using 2 hashmaps
-
-# Frequency of a character can vary from 0 to len(s).
-# Create a hashmap H1 of character to character frequency for the input string.
-# Iterate H1 to create hashmap H2 with key as frequency and value as substrings of repeated strings with length as the frequency.
-# Finally lookup all potential frequencies in decreasing order in H2 and produce the final result.
-class Solution(object):
-    def frequencySort(self, s):
-        """
-        :type s: str
-        :rtype: str
-        """
-        c1, c2 = Counter(s), {}
+# Approach 3: Multiset and Bucket Sort
+# O(n) solution using 2 hashmaps
+class Solution:
+    def frequencySort(self, s: str) -> str:
+        c1, c2 = Counter(s), defaultdict(list)
         for k, v in c1.items():
-            c2.setdefault(v, []).append(k * v)
-        return "".join(["".join(c2[i]) for i in range(len(s), -1, -1) if i in c2])
+            c2[v].append(k * v)
+        return "".join(["".join(c2[i]) for i in range(len(s), -1, -1) if i in c2])  # order of same frequencies does not matter
+
+
+"""
+Frequency of a character can vary from 0 to len(s).
+Create a hashmap H1 of character to character frequency for the input string.
+Iterate H1 to create hashmap H2 with key as frequency and value as substrings of repeated strings with length as the frequency.
+Finally lookup all potential frequencies in decreasing order in H2 and produce the final result.
+"""

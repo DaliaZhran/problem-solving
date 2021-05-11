@@ -11,7 +11,13 @@ Input: arr = [1,2,3,4,5], k = 4, x = 3
 Output: [1,2,3,4]
 """
 
+# Two Pointers
+# Time: O(N)
+# https://leetcode.com/problems/find-k-closest-elements/discuss/202785/Very-simple-Java-O(n)-solution-using-two-pointers
 
+# Binary Search
+# time: O(logN)
+# space: O(1)
 class Solution:
     def findClosestElements(self, arr: List[int], k: int, x: int) -> List[int]:
         l, r = 0, len(arr) - k

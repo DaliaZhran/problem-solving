@@ -9,53 +9,52 @@ push(int x), which pushes an integer x onto the stack.
 pop(), which removes and returns the most frequent element in the stack.
 If there is a tie for most frequent element, the element closest to the top of the stack is removed and returned.
 """
+from collections import defaultdict
+from heapq import heappop, heappush
 
-import collections
 
-
-class FreqStack(object):
+# using stack for each frequency
+# space: O(n + m) where n -> number of values pushed, m -> max number of occurences of one number
+class FreqStack:
     def __init__(self):
-        self.frequencies = collections.Counter()  # counter of frequencies {'x':freq}
-        self.freq_groups = collections.defaultdict(list)  # {'1':[1,2,3], '2':[2,1]}
-        self.max_freq = 0
+        self.frequencies_mp = defaultdict(list)  # {'1':[1,2,3], '2':[2,1]}
+        self.nums_mp = defaultdict(int)  # counter of frequencies {'x':freq}
+        self.top_freq = 0
 
-    def push(self, x):
-        """
-        :type x: int
-        :rtype: None
-        """
-        freq = self.frequencies[x] + 1
-        self.frequencies[x] = freq
-        self.max_freq = max(self.max_freq, freq)
-        self.freq_groups[freq].append(x)
+    # time: O(1)
+    def push(self, val: int) -> None:
+        num_freq = self.nums_mp[val] + 1
+        self.nums_mp[val] = num_freq
+        self.top_freq = max(self.top_freq, num_freq)
+        self.frequencies_mp[num_freq].append(val)
 
-    def pop(self):
-        """
-        :rtype: int
-        """
-        element = self.freq_groups[self.max_freq].pop()
-        self.frequencies[element] -= 1
-        if not self.freq_groups[self.max_freq]:
-            self.max_freq -= 1
-        return element
+    # time: O(1)
+    def pop(self) -> int:
+        val = self.frequencies_mp[self.top_freq].pop()
+        self.nums_mp[val] -= 1
+        if self.frequencies_mp[self.top_freq] == []:
+            self.top_freq -= 1
+        return val
 
 
-# Heap
+# Heap (freq, order, value)
 class FreqStack:
     def __init__(self):
         self.heap = []
-        self.m = collections.defaultdict(int)
-        self.counter = 0
+        self.m = defaultdict(int)
+        self.counter = 0  # order
 
+    # time: O(log(n))
     def push(self, x):
         self.m[x] += 1
-        heapq.heappush(self.heap, (-self.m[x], -self.counter, x))
+        heappush(self.heap, (-self.m[x], -self.counter, x))
         self.counter += 1
 
+    # time: O(log(n))
     def pop(self):
-        toBeRemoved = heapq.heappop(self.heap)
-        self.m[toBeRemoved[2]] -= 1
-        return toBeRemoved[2]
+        _, _, x = heappop(self.heap)
+        self.m[x] -= 1
+        return x
 
 
 # Your FreqStack object will be instantiated and called as such:

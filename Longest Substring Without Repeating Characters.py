@@ -10,6 +10,9 @@ Output: 3
 Explanation: The answer is "abc", with the length of 3.
 """
 
+from collections import defaultdict
+
+
 # * Approach 1: Brute Force
 # Time complexity : O(n^3)
 # Space complexity : O(min(m,n)). We need O(k) space for the sliding window, where k is the size of the Set. The size of the Set is upper bounded by the size of the string n and the size of the charset/alphabet m.
@@ -59,31 +62,40 @@ class Solution(object):
                 r += 1
             else:
                 chars_set.remove(s[l])
-                l += 1
+                l += 1  # r is the same
 
         return count
+
+
+# same as above
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        max_len = start = 0
+        chars_mp = defaultdict(int)
+        for end, end_ch in enumerate(s):
+            chars_mp[end_ch] += 1
+
+            while chars_mp[end_ch] > 1:
+                chars_mp[s[start]] -= 1
+                start += 1
+            max_len = max(max_len, end - start + 1)
+        return max_len
 
 
 # * Optimized Sliding Window
 # Time complexity : O(n). Index j will iterate n times.
 # Space complexity (HashMap) : O(min(m,n)). Same as the previous approach.
-class Solution(object):
-    def lengthOfLongestSubstring(self, s):
-        """
-        :type s: str
-        :rtype: int
-        """
-        start, end = 0, 0
-        chars_index_map = {}
-        count = 0
-        while start <= end and end < len(s):
-            if s[end] in chars_index_map:
-                l = max(chars_index_map[s[end]], start)  # we start from the next element right to the first occurance of the duplicate
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        max_len = start = 0
+        chars_mp = defaultdict(int)
+        for end, end_ch in enumerate(s):
+            if end_ch in chars_mp:
+                start = max(start, chars_mp[end_ch])  # we start from the next element right to the first occurance of the duplicate
 
-            count = max(count, end - l + 1)
-            chars_index_map[s[end]] = end + 1
-            end += 1
-        return count
+            max_len = max(max_len, end - start + 1)
+            chars_mp[end_ch] = end + 1
+        return max_len
 
 
 """

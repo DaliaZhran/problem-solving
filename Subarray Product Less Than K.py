@@ -20,27 +20,21 @@ Note:
 """
 
 # * Sliding Window
-class Solution(object):
-    def numSubarrayProductLessThanK(self, nums, k):
-        """
-        :type nums: List[int]
-        :type k: int
-        :rtype: int
-        """
-        if k <= 1:
+# time : O(n)
+class Solution:
+    def numSubarrayProductLessThanK(self, nums: List[int], k: int) -> int:
+        if k == 0 or not nums:
             return 0
+        count = start = 0
         product = 1
-        left = 0
-        answer = 0
-
-        for right, val in enumerate(nums):
-            product *= val
-            while product >= k:
-                product //= nums[left]
-                left += 1
-            answer += right - left + 1
-
-        return answer
+        for end in range(len(nums)):
+            product *= nums[end]
+            while start <= end and product >= k:
+                product //= nums[start]  # no zeros
+                start += 1
+            count += end - start + 1
+        return count
 
 
+# complicated
 # check Approach #1: Binary Search on Logarithms [Accepted]

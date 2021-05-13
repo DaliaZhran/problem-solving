@@ -13,33 +13,44 @@ Output: [[1,2],[1,4],[1,6]]
 Explanation: The first 3 pairs are returned from the sequence: 
              [1,2],[1,4],[1,6],[7,2],[7,4],[11,2],[7,6],[11,4],[11,6]
 """
+from heapq import heappop, heappush
+from typing import List
 
 
-class Solution(object):
-    def kSmallestPairs(self, nums1, nums2, k):
-        """
-        :type nums1: List[int]
-        :type nums2: List[int]
-        :type k: int
-        :rtype: List[List[int]]
-        """
-        max_heap = []
-        for i in range(min(len(nums1), k)):
-            for j in range(len(nums2)):
-                if len(max_heap) < k:
-                    heappush(max_heap, (-nums1[i] - nums2[j], i, j))
-                else:
-                    if nums1[i] + nums2[j] < -max_heap[0][0]:
-                        heappop(max_heap)
-                        heappush(max_heap, (-nums1[i] - nums2[j], i, j))
-                    else:
-                        break
+# Brute Force
+# Time: O(nm)
+# space: O(nm)
+class Solution:
+    def kSmallestPairs(self, nums1: List[int], nums2: List[int], k: int) -> List[List[int]]:
+        n, m = len(nums1), len(nums2)
+        sums = []
+        for i in range(n):
+            for j in range(m):
+                sums.append((nums1[i] + nums2[j], nums1[i], nums2[j]))
 
-        pairs = []
-        for s, i, j in max_heap:
-            pairs.append([nums1[i], nums2[j]])
+        sums.sort()
+        return [[el1, el2] for s, el1, el2 in sums[:k]]
 
-        return pairs
+
+# Time: O(min(n,k) * m * logk)
+# space: O(k)
+class Solution:
+    def kSmallestPairs(self, nums1: List[int], nums2: List[int], k: int) -> List[List[int]]:
+        n, m = len(nums1), len(nums2)
+        heap = []
+        for i in range(min(n, k)):
+            for j in range(m):
+                summ = nums1[i] + nums2[j]
+                heappush(heap, (-summ, nums1[i], nums2[j]))
+                if len(heap) > k:
+                    heappop(heap)
+
+        res = []
+        while heap:
+            _, el1, el2 = heappop(heap)
+            res.append([el1, el2])
+
+        return res
 
 
 # check other solutions -> https://leetcode.com/problems/find-k-pairs-with-smallest-sums/discuss/84551/simple-Java-O(KlogK)-solution-with-explanation

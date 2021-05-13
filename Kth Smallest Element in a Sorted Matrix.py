@@ -19,36 +19,51 @@ return 13.
 Note:
 You may assume k is always valid, 1 ≤ k ≤ n2.
 """
-from heapq import heappush, heappop
+from heapq import heapify, heappop, heappush
+from typing import List
 
 
-class Solution(object):
-    def kthSmallest(self, matrix, k):
-        """
-        :type matrix: List[List[int]]
-        :type k: int
-        :rtype: int
-        """
-        N = len(matrix[0]) if matrix else 0
-        min_heap = []
-        for row in range(len(matrix)):
-            heappush(min_heap, (matrix[row][0], 0, row))
+# Using Heap
+# time: O((n^2)log(n^2))
+# space: O(n^2)
+class Solution:
+    def kthSmallest(self, matrix: List[List[int]], k: int) -> int:
+        n = len(matrix)
+        heap = []
+        for i in range(n):
+            for j in range(n):
+                heappush(heap, matrix[i][j])
 
-        curr_count = curr_num = 0
-        while min_heap:
-            curr_num, col, row = heappop(min_heap)
-            curr_count += 1
-            if curr_count == k:
-                break
-            if col + 1 < N:
-                heappush(min_heap, (matrix[row][col + 1], col + 1, row))
+        while heap and k:
+            last = heappop(heap)
+            k -= 1
+        return last
 
-        return curr_num
+
+# Using Heap
+# time: O((n)log(n))
+# space: O(n)
+class Solution:
+    def kthSmallest(self, matrix: List[List[int]], k: int) -> int:
+        n = len(matrix)
+        heap = []
+        for i in range(min(k, n)):
+            heap.append((matrix[i][0], 0, i))
+
+        heapify(heap)  # -> in python, it takes O(n)
+
+        while k:
+            num, col, row = heappop(heap)
+            if col + 1 < n:
+                heappush(heap, (matrix[row][col + 1], col + 1, row))
+            k -= 1
+        return num
 
 
 # check binary solution -> https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/solution/
 
-# check time complexity again
+# time: O(N log(M - N))
+# Space: O(1)
 class Solution(object):
     def kthSmallest(self, matrix, k):
         """
@@ -79,17 +94,13 @@ class Solution(object):
 
         while row >= 0 and col < n:
             if matrix[row][col] > mid:
-
                 # As matrix[row][col] is bigger than the mid, let's keep track of the
                 # smallest number greater than the mid
                 larger = min(larger, matrix[row][col])
                 row -= 1
-
             else:
-
                 # As matrix[row][col] is less than or equal to the mid, let's keep track of the
                 # biggest number less than or equal to the mid
-
                 smaller = max(smaller, matrix[row][col])
                 count += row + 1
                 col += 1

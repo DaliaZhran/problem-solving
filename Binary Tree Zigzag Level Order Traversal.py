@@ -19,6 +19,8 @@ return its zigzag level order traversal as:
 """
 
 from collections import deque
+from typing import List
+
 
 # Definition for a binary tree node.
 class TreeNode(object):
@@ -62,7 +64,7 @@ class Solution:
 # Space Complexity : O(H), where H is the height of the tree, i.e. the number of levels in the tree, which would be roughly log2(N)
 class Solution:
     def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
-        def helper(node, level, res):
+        def helper(node, level):
             if not node:
                 return []
             if len(res) == level:
@@ -73,10 +75,33 @@ class Solution:
                 else:
                     res[level].appendleft(node.val)
 
-            helper(node.left, level + 1, res)
-            helper(node.right, level + 1, res)
+            helper(node.left, level + 1)
+            helper(node.right, level + 1)
 
             return res
 
         res = []
-        return helper(root, 0, [])
+        return helper(root, 0)
+
+
+# same as above
+class Solution:
+    def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
+        def helper(node, level, direction):
+            if not node:
+                return
+            if level == len(res):
+                res.append(deque())
+
+            if direction == 0:
+                res[level].append(node.val)
+            else:
+                res[level].appendleft(node.val)
+
+            direction ^= 1
+            helper(node.left, level + 1, direction)
+            helper(node.right, level + 1, direction)
+
+        res = []
+        helper(root, 0, 0)
+        return res

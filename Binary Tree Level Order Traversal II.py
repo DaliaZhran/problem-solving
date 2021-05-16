@@ -1,13 +1,24 @@
 # https://leetcode.com/problems/binary-tree-level-order-traversal-ii/
+"""
+Given the root of a binary tree, return the bottom-up level order traversal of its nodes' values. (i.e., from left to right, level by level from leaf to root).
+
+Example 1:
+
+Input: root = [3,9,20,null,null,15,7]
+Output: [[15,7],[9,20],[3]]
+"""
 
 # Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
 
 import collections
+from typing import List
+
 
 # Iterative
 # Time : O(N) since each node is processed exactly once.
@@ -52,4 +63,22 @@ class Solution:
                     queue.append(node.left)
                 if node.right:
                     queue.append(node.right)
+        return res
+
+
+# Time : O(N)
+# Space : O(N)
+class Solution:
+    def levelOrderBottom(self, root: TreeNode) -> List[List[int]]:
+        def helper(node, level):
+            if not node:
+                return node
+            if len(res) == level:
+                res.appendleft([])
+            res[len(res) - level - 1].append(node.val)  # to avoid reversing at the end
+            helper(node.left, level + 1)
+            helper(node.right, level + 1)
+
+        res = collections.deque()
+        helper(root, 0)
         return res

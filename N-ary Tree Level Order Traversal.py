@@ -5,6 +5,8 @@ Given an n-ary tree, return the level order traversal of its nodes' values.
 
 Nary-Tree input serialization is represented in their level order traversal, each group of children is separated by the null value (See examples).
 """
+import collections
+from typing import List
 
 
 # Definition for a Node.
@@ -40,18 +42,16 @@ class Solution:
 # Space : O(log N) average case, O(N) worst case. The space used is on the runtime stack.
 class Solution:
     def levelOrder(self, root: "Node") -> List[List[int]]:
-        def helper(node, level, res):
+        def helper(node, level):
             if len(res) == level:
                 res.append([node.val])
             else:
                 res[level].append(node.val)
 
             for child in node.children:
-                helper(child, level + 1, res)
-
-            return res
+                helper(child, level + 1)
 
         if not root:
             return []
         res = []
-        return helper(root, 0, [])
+        return helper(root, 0)

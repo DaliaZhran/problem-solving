@@ -13,14 +13,17 @@ Output: [3, 14.5, 11]
 Explanation:
 The average value of nodes on level 0 is 3,  on level 1 is 14.5, and on level 2 is 11. Hence return [3, 14.5, 11].
 """
+import collections
+from typing import List
 
 
 # Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
 
 # BFS
 # Time : O(N)
@@ -44,3 +47,26 @@ class Solution:
                     queue.append(node.right)
             res[-1] /= level_size
         return res
+
+
+# DFS
+# Time : O(N)
+# Space: O(N)
+class Solution:
+    def averageOfLevels(self, root: TreeNode) -> List[float]:
+        def helper(node, level):
+            if not node:
+                return
+
+            if len(res) == level:
+                res.append([node.val, 1])
+            else:
+                res[level][0] += node.val
+                res[level][1] += 1
+
+            helper(node.left, level + 1)
+            helper(node.right, level + 1)
+
+        res = []
+        helper(root, 0)
+        return [summ / count for summ, count in res]

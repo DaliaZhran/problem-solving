@@ -11,43 +11,47 @@ If two nodes have the same position, then the value of the node that is reported
 
 Return an list of non-empty reports in order of X coordinate.  Every report will have a list of values of nodes.
 """
+from collections import defaultdict, deque
+from typing import List
 
 
+# Definition for a binary tree node.
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+
+# BFS
+# time: O(N + K * N/K log N/K) -> K = number of cols
+# space: O(N)
 class Solution:
     def verticalTraversal(self, root: TreeNode) -> List[List[int]]:
-        if root is None:
-            return []
+        if not root:
+            return root
+        queue = deque([(root, 0, 0)])
+        res_map = defaultdict(list)
+        min_col, max_col = 0, 0
+        while queue:
+            node, row, col = queue.popleft()
+            if node:
+                min_col, max_col = min(col, min_col), max(col, max_col)
+                res_map[col].append((row, node.val))
 
-        columnTable = defaultdict(list)
-        min_column = max_column = 0
+                queue.append((node.left, row + 1, col - 1))
+                queue.append((node.right, row + 1, col + 1))
 
-        def BFS(root):
-            nonlocal min_column, max_column
-            queue = deque([(root, 0, 0)])
-
-            while queue:
-                node, row, column = queue.popleft()
-
-                if node is not None:
-                    columnTable[column].append((row, node.val))
-                    min_column = min(min_column, column)
-                    max_column = max(max_column, column)
-
-                    queue.append((node.left, row + 1, column - 1))
-                    queue.append((node.right, row + 1, column + 1))
-
-        # step 1). BFS traversal
-        BFS(root)
-
-        # step 2). extract the values from the columnTable
-        ret = []
-        for col in range(min_column, max_column + 1):
-            # sort first by 'row', then by 'value', in ascending order
-            ret.append([val for row, val in sorted(columnTable[col])])
-
-        return ret
+        res = []
+        for column in range(min_col, max_col + 1):
+            res_map[column].sort()
+            res.append([val for r, val in res_map[column]])
+        return res
 
 
+# DFS
+# time: O(N + K * N/K log N/K) -> K = number of cols
+# space: O(N)
 class Solution:
     def verticalTraversal(self, root: TreeNode) -> List[List[int]]:
         if root is None:
@@ -72,7 +76,8 @@ class Solution:
         # order by column and sort by row
         ret = []
         for col in range(min_column, max_column + 1):
-            col_vals = [val for row, val in sorted(column_table[col])]
+            column_table[col].sort()
+            col_vals = [val for row, val in column_table[col]]
             ret.append(col_vals)
 
         return ret

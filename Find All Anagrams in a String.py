@@ -19,16 +19,15 @@ Explanation:
 The substring with start index = 0 is "cba", which is an anagram of "abc".
 The substring with start index = 6 is "bac", which is an anagram of "abc".
 """
+from collections import Counter
+from typing import List
 
-# time -> O(N_s)
-# space -> O(1)
-class Solution(object):
-    def findAnagrams(self, s, p):
-        """
-        :type s: str
-        :type p: str
-        :rtype: List[int]
-        """
+
+# sliding window
+# time -> O(n) where n is len(s)
+# space -> O(1) since both s and p consist of english letters O(26)
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
         res = []
         len_s = len(s)
         len_p = len(p)
@@ -53,13 +52,11 @@ class Solution(object):
         return res
 
 
-class Solution(object):
-    def findAnagrams(self, s, p):
-        """
-        :type s: str
-        :type p: str
-        :rtype: List[int]
-        """
+# sliding window
+# time -> O(n) where n is len(s)
+# space -> O(1) since both s and p consist of english letters O(26)
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
         res = []
 
         len_p = len(p)

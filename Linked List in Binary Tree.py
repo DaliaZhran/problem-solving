@@ -30,8 +30,8 @@ class TreeNode:
 
 
 # DFS
-# Time O(N * min(L,H))
-# Space O(H)
+# Time : O(N * min(L,H)) -> check again
+# Space : O(H)
 # where N = tree size (number of nodes), H = tree height, L = list length.
 class Solution:
     def isSubPath(self, head: ListNode, root: TreeNode) -> bool:

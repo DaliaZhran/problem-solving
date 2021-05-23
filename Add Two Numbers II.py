@@ -21,30 +21,15 @@ class ListNode(object):
         self.next = next
 
 
-class Solution(object):
-    def addTwoNumbers(self, l1, l2):
-        """
-        :type l1: ListNode
-        :type l2: ListNode
-        :rtype: ListNode
-        """
-
+class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
         def reverseList(head):
-            """
-            :type head: ListNode
-            :rtype: ListNode
-            """
-            if not head:
-                return None
-            prev = head
-            curr = head.next
-            head.next = None
-            while curr:
-                temp = curr.next
-                curr.next = prev
-                prev = curr
-                curr = temp
-
+            prev = None
+            while head:
+                temp = head.next
+                head.next = prev
+                prev = head
+                head = temp
             return prev
 
         l1 = reverseList(l1)
@@ -83,78 +68,66 @@ class Solution(object):
 
 # better optimized solution
 # Time complexity: O(N1 + N2), N1 + N2 is the number of elements in both lists.
-# space: O(1)pace complexity without taking the output list into account, and O(max(N1, N2)) to store the output list.
-class Solution(object):
-    def addTwoNumbers(self, l1, l2):
-        """
-        :type l1: ListNode
-        :type l2: ListNode
-        :rtype: ListNode
-        """
+# space: O(1), space complexity without taking the output list into account, and O(max(N1, N2)) to store the output list.
+class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        if not l1 or not l2:
+            return l1 or l2
 
-        def reverseList(head):
-            """
-            :type head: ListNode
-            :rtype: ListNode
-            """
-            if not head:
-                return None
-            prev = head
-            curr = head.next
-            head.next = None
-            while curr:
-                temp = curr.next
-                curr.next = prev
-                prev = curr
-                curr = temp
-
-            return prev
-
-        # res should be in reversed order too
-        l1 = reverseList(l1)
-        l2 = reverseList(l2)
-        head = None
+        rev_l1 = self.reverseLinkedList(l1)
+        rev_l2 = self.reverseLinkedList(l2)
         carry = 0
-        while l1 or l2:
-            x = l1.val if l1 else 0
-            y = l2.val if l2 else 0
-            node_sum = x + y + carry
-            carry = node_sum // 10
-            curr = ListNode(node_sum % 10)
-            curr.next = head
-            head = curr
-            l1 = l1.next if l1 else None
-            l2 = l2.next if l2 else None
+        res = None
+        while rev_l1 or rev_l2:
+            n1 = 0 if not rev_l1 else rev_l1.val
+            n2 = 0 if not rev_l2 else rev_l2.val
+
+            temp = n1 + n2 + carry
+            carry = temp // 10
+            curr = ListNode(temp % 10)
+            curr.next = res
+            res = curr
+
+            rev_l1 = None if rev_l1 == None else rev_l1.next
+            rev_l2 = None if rev_l2 == None else rev_l2.next
 
         if carry:
             curr = ListNode(carry)
-            curr.next = head
-            head = curr
+            curr.next = res
+            res = curr
+        return res
 
-        return head
+    def reverseLinkedList(self, head):
+        prev = None
+        while head:
+            temp = head.next
+            head.next = prev
+            prev = head
+            head = temp
+        return prev
 
 
 # Follow Up -> No modification for input lists
 # use powerful no int limit in python
-def addTwoNumbers(self, l1, l2):
+class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        x1, x2 = 0, 0
+        while l1:
+            x1 = x1 * 10 + l1.val
+            l1 = l1.next
+        while l2:
+            x2 = x2 * 10 + l2.val
+            l2 = l2.next
+        x = x1 + x2
 
-    x1, x2 = 0, 0
-    while l1:
-        x1 = x1 * 10 + l1.val
-        l1 = l1.next
-    while l2:
-        x2 = x2 * 10 + l2.val
-        l2 = l2.next
-    x = x1 + x2
+        head = ListNode(0)
+        if x == 0:
+            return head
+        while x:
+            v, x = x % 10, x // 10
+            head.next, head.next.next = ListNode(v), head.next
 
-    head = ListNode(0)
-    if x == 0:
-        return head
-    while x:
-        v, x = x % 10, x // 10
-        head.next, head.next.next = ListNode(v), head.next
-
-    return head.next
+        return head.next
 
 
 # Using Stack
@@ -182,3 +155,4 @@ class Solution:
 
 
 # check second solution in question
+# https://leetcode.com/problems/add-two-numbers-ii/discuss/687339/Java-O(N)-solution-with-follow-up-question-no-recursion-no-stacks

@@ -1,24 +1,25 @@
 # https://leetcode.com/problems/find-largest-value-in-each-tree-row/
-
-
 """
 Given the root of a binary tree, return an array of the largest value in each row of the tree (0-indexed).
 """
+
 import collections
+from typing import List
+
 
 # Definition for a binary tree node.
-# class TreeNode(object):
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
+class TreeNode(object):
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
 
 
 # BFS
 # time -> O(n) n is the number of nodes
 # space -> O(n/2)
-class Solution(object):
-    def largestValues(self, root):
+class Solution:
+    def largestValues(self, root: TreeNode) -> List[int]:
         if not root:
             return []
         res = []

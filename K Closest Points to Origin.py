@@ -36,22 +36,17 @@ class Solution(object):
 # Time -> O(n log K) where n is the number of all points and log(K) is the cost of adding and removing items from the heap
 # Space -> O(K) -> space used by heap
 class Solution(object):
-    def calculateDistance(self, point):
-        return point[0] * point[0] + point[1] * point[1]  # ignore the sqrt since we are just comparing points to each other
-
     def kClosest(self, points, K):
-        """
-        :type points: List[List[int]]
-        :type K: int
-        :rtype: List[List[int]]
-        """
-        min_heap = []
+        def calcDistance(point):
+            return point[0] ** 2 + point[1] ** 2
+
+        heap = []
         for i in range(K):
-            heappush(min_heap, (-1 * self.calculateDistance(points[i]), i))
+            heappush(heap, (-calcDistance(points[i]), i))
 
         for i in range(K, len(points)):
-            if -1 * self.calculateDistance(points[i]) > min_heap[0][0]:
-                heappop(min_heap)
-                heappush(min_heap, (-1 * self.calculateDistance(points[i]), i))
-
-        return [points[x[1]] for x in min_heap]
+            dist = calcDistance(points[i])
+            heappush(heap, (-dist, i))
+            if len(heap) > K:
+                heappop(heap)
+        return [points[i] for v, i in heap]

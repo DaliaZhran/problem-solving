@@ -44,3 +44,20 @@ class Solution:
         res = []
         helper(root, res)
         return res
+
+
+class Solution:
+    def findLeaves(self, root: TreeNode) -> List[List[int]]:
+        def postorder(node):
+            if not node:
+                return 0
+            left = postorder(node.left)
+            right = postorder(node.right)
+            if len(res) == max(left, right):
+                res.append([])
+            res[max(left, right)].append(node.val)
+            return max(left, right) + 1
+
+        res = []
+        postorder(root)
+        return res

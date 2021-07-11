@@ -38,44 +38,18 @@ class Solution:
 # Idea is same as postorder traversal
 class Solution:
     def minFallingPathSum(self, matrix: List[List[int]]) -> int:
-        def min_path(r, c):
-            if c < 0 or c >= cols:
+        def helper(i, j):
+            if j < 0 or j == m:
                 return float("inf")
-            if r == rows - 1:
-                return matrix[r][c]
+            if i == n - 1:
+                return matrix[i][j]
+            return matrix[i][j] + min(helper(i + 1, j - 1), helper(i + 1, j), helper(i + 1, j + 1))
 
-            value = matrix[r][c]
-            min_sum = min(min_path(r + 1, c - 1) + value, min_path(r + 1, c) + value, min_path(r + 1, c + 1) + value)
-
-            return min_sum
-
-        rows = len(matrix)
-        cols = len(matrix[0])
+        m = len(matrix)
+        n = len(matrix[0])
         min_sum = float("inf")
-        for i in range(cols):
-            min_sum = min(min_sum, min_path(0, i, 0))
-        return min_sum
-
-
-# Same as before but with passing curr sum
-class Solution:
-    def minFallingPathSum(self, matrix: List[List[int]]) -> int:
-        def min_path(r, c, curr):
-            if c < 0 or c >= cols:
-                return float("inf")
-            if r == rows - 1:
-                return curr + matrix[r][c]
-
-            value = matrix[r][c]
-            min_sum = min(min_path(r + 1, c - 1, curr + value), min_path(r + 1, c, curr + value), min_path(r + 1, c + 1, curr + value))
-
-            return min_sum
-
-        rows = len(matrix)
-        cols = len(matrix[0])
-        min_sum = float("inf")
-        for i in range(cols):
-            min_sum = min(min_sum, min_path(0, i, 0))
+        for i in range(n):
+            min_sum = min(min_sum, helper(0, i))
         return min_sum
 
 
@@ -94,17 +68,15 @@ class Solution:
                 return dp[r][c]
 
             value = matrix[r][c]
-            min_sum = min(min_path(r + 1, c - 1) + value, min_path(r + 1, c) + value, min_path(r + 1, c + 1) + value)
-
-            dp[r][c] = min_sum
-            return min_sum
+            dp[r][c] = min(min_path(r + 1, c - 1) + value, min_path(r + 1, c) + value, min_path(r + 1, c + 1) + value)
+            return dp[r][c]
 
         rows = len(matrix)
         cols = len(matrix[0])
         dp = [[None] * cols for _ in range(rows)]
         min_sum = float("inf")
         for i in range(cols):
-            min_sum = min(min_sum, min_path(0, i, 0))
+            min_sum = min(min_sum, min_path(0, i))
         return min_sum
 
 

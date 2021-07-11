@@ -40,17 +40,12 @@ class Solution(object):
 
 # DFS or Recursive -> different implementation with no helper function
 class Solution:
-    def hasPathSum(self, root, sum):
-        """
-        :type root: TreeNode
-        :type sum: int
-        :rtype: bool
-        """
+    def hasPathSum(self, root: TreeNode, targetSum: int) -> bool:
         if not root:
             return False
-        if not root.left and not root.right and sum - root.val == 0:
+        elif targetSum - root.val == 0 and not root.left and not root.right:
             return True
-        return self.hasPathSum(root.left, sum - root.val) or self.hasPathSum(root.right, sum - root.val)
+        return self.hasPathSum(root.left, targetSum - root.val) or self.hasPathSum(root.right, targetSum - root.val)
 
 
 # DFS with stack

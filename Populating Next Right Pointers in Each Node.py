@@ -109,12 +109,8 @@ class Solution:
 # best solution -> Iterative
 # time O(n)
 # space O(1)
-class Solution(object):
-    def connect(self, root):
-        """
-        :type root: Node
-        :rtype: Node
-        """
+class Solution:
+    def connect(self, root: "Node") -> "Node":
         if not root:
             return None
 
@@ -144,18 +140,12 @@ class Solution(object):
 # space O(1) since in the problem stack space is not counted
 class Solution:
     def connect(self, root: "Node") -> "Node":
-        def helper(node):
-            if not node:
-                return
-
-            if node.left:
-                node.left.next = node.right
-            if node.next and node.right:
-                node.right.next = node.next.left
-
-            helper(node.left)
-            helper(node.right)
-
-        head = root
-        helper(head)
+        if not root:
+            return
+        if root.left:
+            root.left.next = root.right
+        if root.right and root.next:
+            root.right.next = root.next.left
+        self.connect(root.left)
+        self.connect(root.right)
         return root

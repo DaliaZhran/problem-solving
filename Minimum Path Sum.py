@@ -17,23 +17,39 @@ Note: You can only move either down or right at any point in time.
 # Implementation can be more clear if we started from the end to (0,0) instead and use direct recursion instead of side effect
 class Solution:
     def minPathSum(self, grid: List[List[int]]) -> int:
-        def helper(i, j, curr):
-            if i == rows - 1 and j == cols - 1:
-                self.min_sum = min(curr + grid[i][j], self.min_sum)
-            elif i == rows or j == cols:
-                return
-            else:
-                helper(i, j + 1, curr + grid[i][j])
-                helper(i + 1, j, curr + grid[i][j])
+        def helper(i, j):
+            if i == m or j == n:
+                return float("inf")
+            if i == m - 1 and j == n - 1:
+                return grid[i][j]
 
-        rows = len(grid)
-        cols = len(grid[0])
-        self.min_sum = float("inf")
-        helper(0, 0, 0)
-        return self.min_sum
+            return grid[i][j] + min(helper(i + 1, j), helper(i, j + 1))
+
+        m = len(grid)
+        n = len(grid[0])
+        return helper(0, 0)
 
 
-# could not apply memoization here
+# DP (2D) -> Bottom Up
+# Time: O(m * n)
+# Space: O(m * n)
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        def helper(i, j):
+            if i == m or j == n:
+                return float("inf")
+            if dp[i][j] != -1:
+                return dp[i][j]
+            if i == m - 1 and j == n - 1:
+                return grid[i][j]
+
+            dp[i][j] = grid[i][j] + min(helper(i + 1, j), helper(i, j + 1))
+            return dp[i][j]
+
+        m = len(grid)
+        n = len(grid[0])
+        dp = [[-1] * n for _ in range(m)]
+        return helper(0, 0)
 
 
 # DP (2D) -> Bottom Up
@@ -93,7 +109,6 @@ class Solution:
         cols = len(grid[0])
 
         cur = [0] * rows  # Vector for current column sums
-        pre = [0] * rows  # Vector for previous column sums
         cur[0] = grid[0][0]
 
         for i in range(1, rows):

@@ -1,24 +1,18 @@
 # https://leetcode.com/problems/n-th-tribonacci-number/
-
-# The Tribonacci sequence Tn is defined as follows:
-
-# T0 = 0, T1 = 1, T2 = 1, and Tn+3 = Tn + Tn+1 + Tn+2 for n >= 0.
-
-# Given n, return the value of Tn.
-
+"""
+The Tribonacci sequence Tn is defined as follows:
+T0 = 0, T1 = 1, T2 = 1, and Tn+3 = Tn + Tn+1 + Tn+2 for n >= 0.
+Given n, return the value of Tn.
+"""
 
 # sol 1-> normal for loop
 # time -> O(n)
 # space -> O(1)
-class Solution(object):
-    def tribonacci(self, n):
-        """
-        :type n: int
-        :rtype: int
-        """
+class Solution:
+    def tribonacci(self, n: int) -> int:
         if n == 0:
             return 0
-        elif n == 1 or n == 2:
+        elif n < 2:
             return 1
 
         x, y, z = 0, 1, 1
@@ -51,11 +45,7 @@ class Tribonacci(object):
 class Solution(object):
     sol = Tribonacci()
 
-    def tribonacci(self, n):
-        """
-        :type n: int
-        :rtype: int
-        """
+    def tribonacci(self, n: int) -> int:
         return self.sol.nums[n]
 
 
@@ -75,10 +65,5 @@ class Tribonacci(object):
 class Solution(object):
     sol = Tribonacci()
 
-    def tribonacci(self, n):
-        """
-        :type n: int
-        :rtype: int
-        """
+    def tribonacci(self, n: int) -> int:
         return self.sol.nums[n]
-
